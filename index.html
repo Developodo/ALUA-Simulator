@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#071019"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><title>ALUA Simulator V56 · Mobile Layout</title>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#071019"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><title>ALUA Simulator V59 · Mobile Proportions</title>
 <style>
 :root{--bg:#071019;--p:#0f1b27;--p2:#132332;--line:#294054;--txt:#eef4f8;--mut:#90a4b7;--acc:#b3267a;--good:#44d08a;--warn:#f0c450;--bad:#ff6c62;--cyan:#59c8f2}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;padding:10px}.wrap{max-width:1500px;margin:auto}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.brand{font-weight:950;letter-spacing:.08em}.brand b{color:#df4fa7}.sub{color:var(--mut);font-size:12px}.btns{display:flex;gap:6px;flex-wrap:wrap}button{border:1px solid #355069;background:#172737;color:#fff;border-radius:9px;padding:8px 11px;font-weight:850;cursor:pointer}.primary{background:var(--acc)}.danger{background:#6d2632}.grid{display:grid;grid-template-columns:1.7fr .85fr;gap:8px;margin-top:8px}.panel{background:var(--p);border:1px solid var(--line);border-radius:12px;padding:9px}.cards{display:grid;grid-template-columns:repeat(7,minmax(105px,1fr));gap:5px;margin:8px 0}.card{background:var(--p2);border:1px solid #2b4256;border-radius:9px;padding:6px 8px}.k{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}.v{font-size:17px;font-weight:950}.gamebox{border:1px solid #2d4558;border-radius:12px;overflow:hidden;background:#0a131c}canvas{width:100%;height:auto;display:block}.meters{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}.meter{display:grid;grid-template-columns:120px 1fr 62px;gap:6px;align-items:center;font-size:12px}.bar{height:8px;background:#263846;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%}.labs{display:grid;grid-template-columns:1fr 1fr;gap:5px}.lab{background:#101e2a;border:1px solid #2a4154;border-radius:9px;padding:7px}.lab .big{font-size:18px;font-weight:950}.lab small{color:var(--mut)}.controls{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:7px}.feed{background:#2f5b32}.water{background:#1f5c7b}.attack{background:#76254f}.sprint{background:#72580e}.follow{background:#334a61}.pickupReady{outline:3px solid #f3d35a;background:#6b5715!important}.msg{font-size:13px;font-weight:750;min-height:38px;margin-top:7px;color:#eef4f7}.event{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}.pill{padding:3px 8px;border-radius:99px;border:1px solid #79572b;background:#3a2b13;color:#ffe29b;font-weight:900}.labsetup{display:none;margin-top:8px;background:#0d1823;border:1px solid #30475a;border-radius:12px;padding:10px}.labsetup.open{display:block}.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.field label{display:block;font-size:10px;color:var(--mut);margin-bottom:3px}.field input{width:100%;background:#0b141e;border:1px solid #334b5f;color:#fff;border-radius:7px;padding:7px;font-size:14px}.note{font-size:11px;color:var(--mut);line-height:1.4}.strategy{margin-top:6px;font-size:12px;line-height:1.35}.warn{color:#ffd26a}.bad{color:#ff827a}.good{color:#70dda4}@media(max-width:1100px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(4,1fr)}.formgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}.labs{grid-template-columns:1fr}.controls{grid-template-columns:repeat(2,1fr)}.meters{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.meter{grid-template-columns:95px 1fr 54px}}
 
@@ -526,8 +526,396 @@ body.inRace,#app.inRace{width:100vw!important;max-width:100vw!important;}
   .v45RiderHero,.v45CreateGrid,.v45BioGrid,.v45UpgradeGrid,.v46Mechanics,.v46PowerGrid,.v46WeekSecondary{min-width:0!important;max-width:100%!important;}
 }
 
-</style></head><body><div class="wrap" id="app" tabindex="0">
-<div class="top"><div><div class="brand">ALUA <b>CYCLING CAREER</b> · V56</div><div class="sub">RACE IQ · FÍSICA · CARRERA · PROGRESIÓN</div></div><div class="btns"><button id="careerBtn" class="menuOnly">MI CICLISTA</button><button id="start" class="primary menuOnly">CORRER</button><button id="pause" class="raceOnly">PAUSA</button><button id="retire" class="danger raceOnly">RETIRARSE</button><button id="restart" style="display:none">REINICIAR</button><button id="soundBtn" class="soundOn">🔊 SONIDO</button><button id="labBtn" style="display:none">LAB</button></div></div>
+
+
+/* ==========================================================
+   V57 MOBILE CSS RESET — single authoritative mobile layout
+   ========================================================== */
+@media (max-width:760px){
+  html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:hidden!important;}
+  body.inRace{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;overflow:hidden!important;padding:0!important;margin:0!important;}
+  body.inRace #app,body.inRace .wrap,body.inRace #mainGrid,body.inRace .grid{
+    position:static!important;width:100%!important;max-width:100%!important;min-width:0!important;height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important;display:block!important;
+  }
+  body.inRace .top,body.inRace .cards,body.inRace #legacyRacePanel,body.inRace .telemetryToggle{display:none!important;}
+
+  /* ROAD — always ends above control dock */
+  body.inRace .gamebox{
+    position:fixed!important;inset:0 0 204px 0!important;width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;border-radius:0!important;overflow:hidden!important;
+  }
+  body.inRace .gamebox canvas{
+    position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;object-fit:cover!important;display:block!important;
+  }
+
+  /* BOTTOM CONTROLS — exact rows, no sticky/fixed children */
+  body.inRace .mobileDock.mobilePro{
+    position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100vw!important;max-width:100vw!important;height:204px!important;min-height:204px!important;margin:0!important;padding:4px 5px calc(4px + env(safe-area-inset-bottom))!important;
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:26px 45px 49px 30px 42px!important;gap:2px!important;
+    overflow:hidden!important;background:#071019!important;border-top:1px solid #385066!important;z-index:90!important;
+  }
+  body.inRace .racePrompt{display:flex!important;grid-row:1!important;height:26px!important;min-height:26px!important;max-height:26px!important;margin:0!important;padding:2px 5px!important;min-width:0!important;overflow:hidden!important;align-items:center!important;}
+  body.inRace .racePrompt b{font-size:8px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;min-width:0!important;}
+  body.inRace .racePrompt small{font-size:5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  body.inRace .mobilePrimary.proTactics{
+    grid-row:2!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;width:100%!important;height:45px!important;margin:0!important;min-width:0!important;
+  }
+  body.inRace .proTactics button,body.inRace .proTactics #mContext,body.inRace .proTactics #mFollow,body.inRace .proTactics #mAttack,body.inRace .proTactics #mSprint{
+    position:static!important;display:flex!important;width:100%!important;min-width:0!important;max-width:none!important;height:45px!important;min-height:45px!important;max-height:45px!important;margin:0!important;padding:2px 1px!important;transform:none!important;
+    flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;border-radius:8px!important;font-size:6.8px!important;line-height:1!important;overflow:hidden!important;white-space:normal!important;text-align:center!important;
+  }
+  body.inRace .proTactics button span{font-size:12px!important;line-height:12px!important;}
+
+  body.inRace .powerConsole{
+    grid-row:3!important;display:grid!important;grid-template-columns:48px minmax(0,1fr) 48px!important;gap:3px!important;width:100%!important;height:49px!important;min-width:0!important;margin:0!important;
+  }
+  body.inRace .powerStep,body.inRace .powerCore{
+    position:static!important;width:100%!important;min-width:0!important;height:49px!important;min-height:49px!important;max-height:49px!important;margin:0!important;padding:2px!important;border-radius:8px!important;overflow:hidden!important;
+  }
+  body.inRace .powerStep b{font-size:17px!important;line-height:17px!important;}
+  body.inRace .powerStep small{font-size:5px!important;}
+  body.inRace .powerCore strong{font-size:24px!important;line-height:25px!important;white-space:nowrap!important;}
+  body.inRace .powerCore em{font-size:7px!important;}
+  body.inRace .powerCore>small{display:none!important;}
+  body.inRace .powerZone{font-size:5px!important;margin:0!important;padding:1px 4px!important;white-space:nowrap!important;}
+  body.inRace .powerSlider{display:none!important;}
+
+  body.inRace .positionRow{
+    grid-row:4!important;position:static!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:3px!important;width:100%!important;height:30px!important;min-height:30px!important;margin:0!important;overflow:hidden!important;
+  }
+  body.inRace .positionRow button,body.inRace .positionRow #mPickup,body.inRace .positionRow #mPickup.contextVisible{
+    position:static!important;display:flex!important;transform:none!important;inset:auto!important;width:100%!important;min-width:0!important;height:30px!important;min-height:30px!important;max-height:30px!important;margin:0!important;padding:1px 3px!important;border-radius:7px!important;z-index:auto!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;
+  }
+  body.inRace .positionRow #mPickup.contextHidden{display:none!important;}
+  body.inRace .positionRow:has(#mPickup.contextVisible){grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr) minmax(0,.8fr)!important;}
+  body.inRace .positionBtn{font-size:12px!important;line-height:1!important;}
+  body.inRace .positionBtn span,body.inRace .feedZone small{font-size:5px!important;}
+  body.inRace .feedZone>span{font-size:11px!important;}
+  body.inRace .feedZone b{font-size:6px!important;}
+
+  body.inRace .mobileInv.proFuel{
+    grid-row:5!important;position:static!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) 40px 40px!important;gap:3px!important;width:100%!important;height:42px!important;min-height:42px!important;margin:0!important;overflow:hidden!important;
+  }
+  body.inRace .mobileInv.proFuel button{
+    position:static!important;width:100%!important;min-width:0!important;max-width:none!important;height:42px!important;min-height:42px!important;max-height:42px!important;margin:0!important;padding:2px!important;transform:none!important;border-radius:8px!important;overflow:hidden!important;
+  }
+  body.inRace #mBar{display:none!important;}
+  body.inRace .fuelBtn{display:grid!important;grid-template-columns:15px minmax(0,1fr) auto!important;grid-template-rows:1fr!important;gap:2px!important;align-items:center!important;text-align:left!important;}
+  body.inRace .fuelBtn .fuelIcon{grid-row:auto!important;font-size:11px!important;}
+  body.inRace .fuelBtn b,body.inRace .fuelBtn strong{grid-column:auto!important;grid-row:auto!important;font-size:6.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  body.inRace .fuelBtn small{display:none!important;}
+  body.inRace .pauseBtn{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;font-size:11px!important;line-height:1!important;}
+  body.inRace .pauseBtn small{font-size:4.8px!important;}
+
+  /* Overlay HUD stays inside road and can never widen viewport */
+  body.inRace .mobilehud{position:absolute!important;display:grid!important;left:4px!important;right:4px!important;top:4px!important;width:auto!important;max-width:none!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;z-index:20!important;}
+  body.inRace .mh{min-width:0!important;padding:2px!important;overflow:hidden!important;}
+  body.inRace .mh small{font-size:5px!important;} body.inRace .mh b{font-size:9px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  body.inRace .raceTimer{position:absolute!important;top:36px!important;right:4px!important;left:auto!important;width:auto!important;max-width:63%!important;padding:3px 6px!important;font-size:6px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;z-index:24!important;}
+  body.inRace .v48LimitBadge{position:absolute!important;left:4px!important;right:auto!important;top:36px!important;max-width:47%!important;font-size:5.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;z-index:24!important;}
+  body.inRace .v48WindBadge{display:none!important;}
+  body.inRace .v54PowerReserve{position:absolute!important;left:4px!important;right:4px!important;top:60px!important;width:auto!important;max-width:none!important;min-width:0!important;padding:3px 4px!important;gap:3px!important;font-size:5px!important;line-height:1!important;white-space:nowrap!important;overflow:hidden!important;z-index:23!important;}
+  body.inRace .v54PowerReserve b,body.inRace .v54PowerReserve strong{font-size:5.5px!important;white-space:nowrap!important;}
+  body.inRace .v46Vitals,body.inRace .v46Vitals.v50Vitals{position:absolute!important;left:4px!important;right:4px!important;bottom:4px!important;width:auto!important;max-width:none!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:2px!important;z-index:22!important;}
+  body.inRace .v50Vital{min-width:0!important;padding:2px 3px!important;overflow:hidden!important;}
+  body.inRace .v50Top,body.inRace .v50Sub{min-width:0!important;gap:1px!important;overflow:hidden!important;}
+  body.inRace .v50Top span{font-size:4px!important;} body.inRace .v50Top b{font-size:7px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  body.inRace .v50Sub small,body.inRace .v50Sub strong{font-size:3.7px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  /* DECISION MENU — independent modal, never laid out with bottom controls */
+  body.inRace .focusOverlay{
+    position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;padding:10px!important;margin:0!important;display:none!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:rgba(1,6,10,.82)!important;z-index:500!important;
+  }
+  body.inRace .focusOverlay.open{display:flex!important;}
+  body.inRace .focusCard{
+    position:relative!important;width:min(94vw,520px)!important;max-width:94vw!important;min-width:0!important;height:auto!important;max-height:88dvh!important;margin:0!important;padding:10px!important;overflow-y:auto!important;overflow-x:hidden!important;border-radius:14px!important;
+  }
+  body.inRace .focusTop{display:grid!important;grid-template-columns:minmax(0,1fr) 50px!important;gap:6px!important;align-items:start!important;min-width:0!important;}
+  body.inRace .focusKicker{font-size:6px!important;} body.inRace .focusTitle{font-size:15px!important;line-height:1.05!important;margin:2px 0!important;} body.inRace .focusText{font-size:8px!important;line-height:1.25!important;}
+  body.inRace .focusTimer{width:50px!important;min-width:50px!important;padding:4px!important;} body.inRace .focusTimer small{font-size:5px!important;} body.inRace .focusTimer b{font-size:16px!important;}
+  body.inRace .focusChoices{
+    display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:5px!important;width:100%!important;min-width:0!important;margin-top:7px!important;
+  }
+  body.inRace .focusChoices button{
+    position:static!important;display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:58px!important;max-height:none!important;margin:0!important;padding:7px 8px!important;overflow:hidden!important;text-align:left!important;white-space:normal!important;transform:none!important;
+  }
+  body.inRace .focusChoices button strong{display:block!important;font-size:9px!important;line-height:1.1!important;white-space:normal!important;}
+  body.inRace .focusChoices button small{display:block!important;font-size:6.5px!important;line-height:1.25!important;white-space:normal!important;overflow:visible!important;max-height:none!important;margin-top:3px!important;}
+  body.inRace .focusOutcome{font-size:7px!important;line-height:1.25!important;margin-top:5px!important;}
+
+  body.inRace #v45RaceClass{display:none!important;}
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  body.inRace .gamebox{bottom:196px!important;}
+  body.inRace .mobileDock.mobilePro{height:196px!important;min-height:196px!important;grid-template-rows:24px 43px 47px 28px 42px!important;}
+  body.inRace .racePrompt{height:24px!important;min-height:24px!important;max-height:24px!important;}
+  body.inRace .mobilePrimary.proTactics,body.inRace .proTactics button,body.inRace .proTactics #mContext,body.inRace .proTactics #mFollow,body.inRace .proTactics #mAttack,body.inRace .proTactics #mSprint{height:43px!important;min-height:43px!important;max-height:43px!important;}
+  body.inRace .powerConsole,body.inRace .powerStep,body.inRace .powerCore{height:47px!important;min-height:47px!important;max-height:47px!important;}
+  body.inRace .positionRow,body.inRace .positionRow button,body.inRace .positionRow #mPickup,body.inRace .positionRow #mPickup.contextVisible{height:28px!important;min-height:28px!important;max-height:28px!important;}
+  body.inRace .proTactics button{font-size:6.1px!important;} body.inRace .proTactics button span{font-size:11px!important;}
+  body.inRace .powerConsole{grid-template-columns:44px minmax(0,1fr) 44px!important;} body.inRace .powerCore strong{font-size:21px!important;}
+  body.inRace .mobileInv.proFuel{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr) 36px 36px!important;}
+  body.inRace .focusCard{width:96vw!important;max-width:96vw!important;padding:8px!important;max-height:92dvh!important;}
+  body.inRace .focusChoices button{min-height:54px!important;padding:6px!important;}
+}
+
+/* LANDSCAPE: road left, controls right; no shared absolute geometry */
+@media (max-width:900px) and (orientation:landscape) and (max-height:520px){
+  body.inRace .gamebox{inset:0 40vw 0 0!important;bottom:0!important;}
+  body.inRace .mobileDock.mobilePro{
+    left:auto!important;right:0!important;top:0!important;bottom:0!important;width:40vw!important;max-width:40vw!important;height:100dvh!important;min-height:0!important;
+    grid-template-rows:24px 46px 52px 32px 44px!important;gap:3px!important;padding:4px!important;overflow-y:auto!important;overflow-x:hidden!important;
+  }
+  body.inRace .racePrompt{height:24px!important;min-height:24px!important;max-height:24px!important;}
+  body.inRace .mobilePrimary.proTactics,body.inRace .proTactics button,body.inRace .proTactics #mContext,body.inRace .proTactics #mFollow,body.inRace .proTactics #mAttack,body.inRace .proTactics #mSprint{height:46px!important;min-height:46px!important;max-height:46px!important;}
+  body.inRace .powerConsole,body.inRace .powerStep,body.inRace .powerCore{height:52px!important;min-height:52px!important;max-height:52px!important;}
+  body.inRace .positionRow,body.inRace .positionRow button,body.inRace .positionRow #mPickup,body.inRace .positionRow #mPickup.contextVisible{height:32px!important;min-height:32px!important;max-height:32px!important;}
+  body.inRace .mobileInv.proFuel,body.inRace .mobileInv.proFuel button{height:44px!important;min-height:44px!important;max-height:44px!important;}
+  body.inRace .proTactics button{font-size:5.8px!important;} body.inRace .proTactics button span{font-size:10px!important;}
+  body.inRace .powerConsole{grid-template-columns:42px minmax(0,1fr) 42px!important;} body.inRace .powerCore strong{font-size:21px!important;}
+  body.inRace .mobileInv.proFuel{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) 34px 34px!important;}
+  body.inRace .focusOverlay{padding:6px!important;}
+  body.inRace .focusCard{width:min(70vw,580px)!important;max-width:70vw!important;max-height:94dvh!important;}
+  body.inRace .focusChoices{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important;}
+  body.inRace .focusChoices button{min-height:84px!important;}
+}
+
+
+
+/* ==========================================================
+   V58 MOBILE LAYOUT — verified full-width geometry
+   ========================================================== */
+@media (max-width:760px){
+  html,body{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0!important;overflow-x:hidden!important;}
+  body.inRace{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;overflow:hidden!important;background:#071019!important;}
+  body.inRace #app,body.inRace .wrap,body.inRace #mainGrid,body.inRace .grid{width:100%!important;max-width:100%!important;min-width:0!important;height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important;}
+  body.inRace .top,body.inRace .cards,body.inRace #legacyRacePanel,body.inRace .telemetryToggle{display:none!important;}
+
+  /* Game surface: never crop horizontally. */
+  body.inRace .gamebox{position:fixed!important;left:0!important;right:0!important;top:0!important;bottom:208px!important;width:100%!important;max-width:100%!important;min-width:0!important;height:auto!important;margin:0!important;padding:0!important;overflow:hidden!important;border:0!important;border-radius:0!important;background:#071019!important;z-index:1!important;}
+  body.inRace .gamebox canvas#game{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;min-width:0!important;object-fit:fill!important;object-position:center top!important;display:block!important;}
+
+  /* Top HUD has three exclusive rows. Profile is drawn below them in canvas. */
+  body.inRace .mobilehud{display:none!important;}
+  body.inRace .ttBadge{position:absolute!important;left:4px!important;right:4px!important;top:4px!important;width:auto!important;max-width:none!important;height:22px!important;line-height:16px!important;padding:3px 7px!important;font-size:7px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;z-index:31!important;}
+  body.inRace .raceTimer{position:absolute!important;top:29px!important;right:4px!important;left:50%!important;width:auto!important;max-width:none!important;height:21px!important;padding:3px 6px!important;font-size:6.5px!important;line-height:14px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;z-index:31!important;}
+  body.inRace .v48LimitBadge{position:absolute!important;top:29px!important;left:4px!important;right:50.5%!important;width:auto!important;max-width:none!important;height:21px!important;padding:3px 6px!important;font-size:6px!important;line-height:14px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;z-index:31!important;}
+  body.inRace .v48WindBadge{display:none!important;}
+  body.inRace .v54PowerReserve{position:absolute!important;left:4px!important;right:4px!important;top:53px!important;width:auto!important;max-width:none!important;min-width:0!important;height:18px!important;padding:2px 5px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;font-size:5.5px!important;line-height:12px!important;white-space:nowrap!important;overflow:hidden!important;z-index:31!important;}
+  body.inRace .v54PowerReserve *{font-size:5.5px!important;white-space:nowrap!important;}
+
+  /* Bottom vitals live inside the game, above controls. */
+  body.inRace .v46Vitals,body.inRace .v46Vitals.v50Vitals{position:absolute!important;left:4px!important;right:4px!important;bottom:4px!important;width:auto!important;max-width:none!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;z-index:28!important;}
+  body.inRace .v50Vital{min-width:0!important;overflow:hidden!important;padding:3px 4px!important;}
+  body.inRace .v50Top,body.inRace .v50Sub{min-width:0!important;overflow:hidden!important;}
+  body.inRace .v50Top span,body.inRace .v50Top b,body.inRace .v50Sub small,body.inRace .v50Sub strong{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  /* Dock: exact 4 rows. Fuel title and range slider are removed from mobile flow. */
+  body.inRace .mobileDock.mobilePro{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;max-width:100%!important;min-width:0!important;height:208px!important;min-height:208px!important;margin:0!important;padding:4px 5px calc(4px + env(safe-area-inset-bottom))!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:28px 48px 52px 30px 42px!important;gap:2px!important;overflow:hidden!important;background:#071019!important;border-top:1px solid #385066!important;z-index:100!important;}
+  body.inRace .mobileDock *{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;}
+  body.inRace .fuelTitle,body.inRace .powerSlider{display:none!important;}
+
+  body.inRace .racePrompt{grid-row:1!important;width:100%!important;height:28px!important;min-height:28px!important;max-height:28px!important;margin:0!important;padding:3px 6px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;overflow:hidden!important;}
+  body.inRace .racePrompt>div{min-width:0!important;overflow:hidden!important;}
+  body.inRace .racePrompt b,body.inRace .racePrompt small,body.inRace .racePrompt span{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  body.inRace .mobilePrimary.proTactics{grid-row:2!important;position:static!important;width:100%!important;height:48px!important;margin:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .mobilePrimary.proTactics button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:48px!important;min-height:48px!important;max-height:48px!important;margin:0!important;padding:3px 2px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:1px!important;overflow:hidden!important;font-size:7px!important;line-height:1!important;border-radius:8px!important;}
+  body.inRace .mobilePrimary.proTactics button span{font-size:13px!important;line-height:13px!important;}
+
+  body.inRace .powerConsole{grid-row:3!important;position:static!important;width:100%!important;height:52px!important;margin:0!important;display:grid!important;grid-template-columns:48px minmax(0,1fr) 48px!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .powerConsole>*{position:static!important;inset:auto!important;transform:none!important;height:52px!important;min-height:52px!important;max-height:52px!important;margin:0!important;overflow:hidden!important;}
+  body.inRace .powerCore{padding:2px 3px!important;}
+  body.inRace .powerCore strong{font-size:25px!important;line-height:27px!important;}
+  body.inRace .powerCore>small{display:none!important;}
+  body.inRace .powerZone{font-size:5.5px!important;margin:0!important;padding:1px 4px!important;}
+  body.inRace .powerStep{padding:2px!important;}
+  body.inRace .powerStep b{font-size:17px!important;line-height:18px!important;}
+  body.inRace .powerStep small{font-size:5px!important;}
+
+  body.inRace .positionRow{grid-row:4!important;position:static!important;width:100%!important;height:30px!important;min-height:30px!important;max-height:30px!important;margin:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .positionRow:has(#mPickup.contextVisible){grid-template-columns:minmax(0,.8fr) minmax(0,1.35fr) minmax(0,.8fr)!important;}
+  body.inRace .positionRow button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:30px!important;min-height:30px!important;max-height:30px!important;margin:0!important;padding:2px 3px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;border-radius:7px!important;}
+  body.inRace #mPickup.contextHidden{display:none!important;}
+  body.inRace #mPickup.contextVisible{display:flex!important;}
+
+  body.inRace .mobileInv.proFuel{grid-row:5!important;position:static!important;width:100%!important;height:42px!important;min-height:42px!important;max-height:42px!important;margin:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) 38px 38px!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .mobileInv.proFuel button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:42px!important;min-height:42px!important;max-height:42px!important;margin:0!important;padding:2px!important;overflow:hidden!important;border-radius:8px!important;}
+  body.inRace #mBar{display:none!important;}
+  body.inRace .fuelBtn{display:grid!important;grid-template-columns:15px minmax(0,1fr) auto!important;align-items:center!important;gap:2px!important;}
+  body.inRace .fuelBtn .fuelIcon{font-size:12px!important;}
+  body.inRace .fuelBtn b,body.inRace .fuelBtn strong{font-size:6.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  body.inRace .fuelBtn small{display:none!important;}
+
+  /* Decision modal gets the entire viewport. Dock is completely removed while open. */
+  body.inRace.focusOpenMobile .mobileDock.mobilePro,body.inRace:has(.focusOverlay.open) .mobileDock.mobilePro{display:none!important;}
+  body.inRace.focusOpenMobile .gamebox,body.inRace:has(.focusOverlay.open) .gamebox{bottom:0!important;}
+  body.inRace .focusOverlay{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;margin:0!important;padding:10px!important;display:none!important;align-items:center!important;justify-content:center!important;background:rgba(1,6,10,.92)!important;z-index:1000!important;overflow:hidden!important;}
+  body.inRace .focusOverlay.open{display:flex!important;}
+  body.inRace .focusCard{position:relative!important;width:calc(100vw - 20px)!important;max-width:520px!important;min-width:0!important;max-height:calc(100dvh - 20px)!important;margin:0!important;padding:10px!important;overflow-y:auto!important;overflow-x:hidden!important;border-radius:14px!important;}
+  body.inRace .focusTop{display:grid!important;grid-template-columns:minmax(0,1fr) 54px!important;gap:7px!important;align-items:start!important;}
+  body.inRace .focusChoices{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:6px!important;width:100%!important;margin-top:8px!important;}
+  body.inRace .focusChoices button{position:static!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:64px!important;margin:0!important;padding:8px!important;overflow:visible!important;white-space:normal!important;text-align:left!important;transform:none!important;}
+  body.inRace .focusChoices button strong{display:block!important;font-size:10px!important;line-height:1.15!important;white-space:normal!important;}
+  body.inRace .focusChoices button small{display:block!important;font-size:7px!important;line-height:1.3!important;white-space:normal!important;overflow:visible!important;margin-top:3px!important;}
+  body.inRace #v45RaceClass{display:none!important;}
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  body.inRace .gamebox{bottom:200px!important;}
+  body.inRace .mobileDock.mobilePro{height:200px!important;min-height:200px!important;grid-template-rows:26px 45px 49px 28px 40px!important;}
+  body.inRace .racePrompt{height:26px!important;min-height:26px!important;max-height:26px!important;}
+  body.inRace .mobilePrimary.proTactics,body.inRace .mobilePrimary.proTactics button{height:45px!important;min-height:45px!important;max-height:45px!important;}
+  body.inRace .powerConsole,body.inRace .powerConsole>*{height:49px!important;min-height:49px!important;max-height:49px!important;}
+  body.inRace .positionRow,body.inRace .positionRow button{height:28px!important;min-height:28px!important;max-height:28px!important;}
+  body.inRace .mobileInv.proFuel,body.inRace .mobileInv.proFuel button{height:40px!important;min-height:40px!important;max-height:40px!important;}
+}
+
+/* Landscape: preserve full game width on left, controls get an exclusive right column. */
+@media (max-width:900px) and (orientation:landscape) and (max-height:520px){
+  body.inRace .gamebox{position:fixed!important;left:0!important;right:38vw!important;top:0!important;bottom:0!important;width:auto!important;height:100dvh!important;}
+  body.inRace .gamebox canvas#game{width:100%!important;height:100%!important;object-fit:fill!important;}
+  body.inRace .mobileDock.mobilePro{position:fixed!important;left:62vw!important;right:0!important;top:0!important;bottom:0!important;width:38vw!important;max-width:38vw!important;height:100dvh!important;min-height:0!important;grid-template-rows:26px 48px 52px 30px 42px!important;overflow-y:auto!important;overflow-x:hidden!important;}
+  body.inRace.focusOpenMobile .mobileDock.mobilePro,body.inRace:has(.focusOverlay.open) .mobileDock.mobilePro{display:none!important;}
+  body.inRace.focusOpenMobile .gamebox,body.inRace:has(.focusOverlay.open) .gamebox{right:0!important;}
+  body.inRace .focusCard{width:min(94vw,620px)!important;max-width:94vw!important;}
+  body.inRace .focusChoices{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+}
+
+</style>
+<style id="v59MobileProportions">
+/* V59: one final mobile geometry. No horizontal cropping, no controls under FOCUS. */
+@media (max-width:1100px), (pointer:coarse){
+  html,body{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:clip!important;}
+  body.inRace{position:fixed!important;inset:0!important;width:100vw!important;max-width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;}
+  body.inRace #app,body.inRace .wrap,body.inRace .grid,body.inRace #mainGrid{width:100vw!important;max-width:100vw!important;min-width:0!important;margin:0!important;padding:0!important;overflow:hidden!important;}
+  body.inRace .top,body.inRace .cards,body.inRace #legacyRacePanel,body.inRace .telemetryToggle{display:none!important;}
+
+  /* Race viewport: full viewport width, exclusive space above the controls. */
+  body.inRace .gamebox{position:fixed!important;left:0!important;right:0!important;top:0!important;bottom:190px!important;width:100vw!important;max-width:100vw!important;min-width:100vw!important;height:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;overflow:hidden!important;background:#071019!important;z-index:1!important;}
+  body.inRace .gamebox canvas#game{position:absolute!important;inset:0!important;width:100vw!important;max-width:100vw!important;min-width:100vw!important;height:100%!important;margin:0!important;padding:0!important;display:block!important;object-fit:fill!important;object-position:center top!important;transform:none!important;}
+
+  /* Compact top status rows; they never share coordinates. */
+  body.inRace .ttBadge{position:absolute!important;top:3px!important;left:3px!important;right:3px!important;width:auto!important;height:19px!important;min-height:19px!important;max-height:19px!important;padding:2px 6px!important;line-height:15px!important;font-size:6.3px!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;z-index:40!important;}
+  body.inRace .v48LimitBadge{position:absolute!important;top:25px!important;left:3px!important;right:50.5%!important;width:auto!important;height:19px!important;min-height:19px!important;padding:2px 5px!important;font-size:5.7px!important;line-height:15px!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;z-index:40!important;}
+  body.inRace .raceTimer{position:absolute!important;top:25px!important;left:50.5%!important;right:3px!important;width:auto!important;height:19px!important;min-height:19px!important;padding:2px 5px!important;font-size:5.9px!important;line-height:15px!important;overflow:hidden!important;white-space:nowrap!important;text-overflow:ellipsis!important;z-index:40!important;}
+  body.inRace .v54PowerReserve{position:absolute!important;top:47px!important;left:3px!important;right:3px!important;width:auto!important;max-width:none!important;height:17px!important;min-height:17px!important;padding:1px 5px!important;font-size:5.2px!important;line-height:13px!important;overflow:hidden!important;white-space:nowrap!important;z-index:40!important;}
+  body.inRace .v54PowerReserve *{font-size:5.2px!important;line-height:13px!important;white-space:nowrap!important;}
+  body.inRace .v48WindBadge,body.inRace .mobilehud{display:none!important;}
+
+  /* Vitals are inside the race viewport and cannot enlarge it. */
+  body.inRace .v46Vitals,body.inRace .v46Vitals.v50Vitals{position:absolute!important;left:4px!important;right:4px!important;bottom:4px!important;width:auto!important;max-width:calc(100vw - 8px)!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;z-index:35!important;overflow:hidden!important;}
+  body.inRace .v50Vital{min-width:0!important;overflow:hidden!important;padding:3px!important;}
+  body.inRace .v50Top,body.inRace .v50Sub{min-width:0!important;overflow:hidden!important;}
+  body.inRace .v50Top span,body.inRace .v50Top b,body.inRace .v50Sub small,body.inRace .v50Sub strong{font-size:6px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  /* Controls: five non-overlapping rows with exact total height 190px. */
+  body.inRace .mobileDock.mobilePro{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100vw!important;max-width:100vw!important;min-width:100vw!important;height:190px!important;min-height:190px!important;max-height:190px!important;margin:0!important;padding:3px 4px calc(3px + env(safe-area-inset-bottom))!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:22px 38px 45px 27px 38px!important;gap:2px!important;overflow:hidden!important;background:#071019!important;border-top:1px solid #385066!important;z-index:200!important;}
+  body.inRace .mobileDock.mobilePro *{box-sizing:border-box!important;min-width:0!important;max-width:100%!important;}
+  body.inRace .fuelTitle,body.inRace .powerSlider{display:none!important;}
+
+  body.inRace .racePrompt{grid-row:1!important;position:static!important;width:100%!important;height:22px!important;min-height:22px!important;max-height:22px!important;margin:0!important;padding:2px 5px!important;overflow:hidden!important;border-radius:6px!important;}
+  body.inRace .racePrompt b{font-size:8px!important;line-height:9px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  body.inRace .racePrompt small,body.inRace .racePrompt span{font-size:5px!important;line-height:6px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  body.inRace .mobilePrimary.proTactics{grid-row:2!important;position:static!important;width:100%!important;height:38px!important;margin:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .mobilePrimary.proTactics button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:38px!important;min-height:38px!important;max-height:38px!important;margin:0!important;padding:2px 1px!important;border-radius:7px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:0!important;overflow:hidden!important;font-size:6.5px!important;line-height:7px!important;}
+  body.inRace .mobilePrimary.proTactics button span{font-size:11px!important;line-height:11px!important;}
+  body.inRace .mobilePrimary.proTactics button small{font-size:5px!important;line-height:6px!important;}
+
+  body.inRace .powerConsole{grid-row:3!important;position:static!important;width:100%!important;height:45px!important;margin:0!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) 42px!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .powerConsole>*{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:45px!important;min-height:45px!important;max-height:45px!important;margin:0!important;overflow:hidden!important;border-radius:7px!important;}
+  body.inRace .powerStep{padding:1px!important;}
+  body.inRace .powerStep b{font-size:15px!important;line-height:16px!important;}
+  body.inRace .powerStep small{font-size:4.8px!important;line-height:5px!important;}
+  body.inRace .powerCore{padding:1px 2px!important;}
+  body.inRace .powerCore>small{display:none!important;}
+  body.inRace .powerCore strong{font-size:22px!important;line-height:23px!important;}
+  body.inRace .powerZone{font-size:5px!important;line-height:6px!important;margin:0!important;padding:1px 3px!important;}
+
+  body.inRace .positionRow{grid-row:4!important;position:static!important;width:100%!important;height:27px!important;min-height:27px!important;max-height:27px!important;margin:0!important;display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .positionRow:has(#mPickup.contextVisible){grid-template-columns:minmax(0,.82fr) minmax(0,1.36fr) minmax(0,.82fr)!important;}
+  body.inRace .positionRow button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:27px!important;min-height:27px!important;max-height:27px!important;margin:0!important;padding:1px 2px!important;border-radius:6px!important;font-size:6px!important;line-height:7px!important;overflow:hidden!important;}
+  body.inRace #mPickup.contextHidden{display:none!important;}
+  body.inRace #mPickup.contextVisible{display:flex!important;align-items:center!important;justify-content:center!important;}
+
+  body.inRace .mobileInv.proFuel{grid-row:5!important;position:static!important;width:100%!important;height:38px!important;min-height:38px!important;max-height:38px!important;margin:0!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr) 34px 34px!important;gap:3px!important;overflow:hidden!important;}
+  body.inRace .mobileInv.proFuel button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;height:38px!important;min-height:38px!important;max-height:38px!important;margin:0!important;padding:1px!important;border-radius:7px!important;overflow:hidden!important;}
+  body.inRace #mBar{display:none!important;}
+  body.inRace .fuelBtn{display:grid!important;grid-template-columns:13px minmax(0,1fr) auto!important;gap:2px!important;align-items:center!important;}
+  body.inRace .fuelBtn .fuelIcon{font-size:11px!important;}
+  body.inRace .fuelBtn b,body.inRace .fuelBtn strong{font-size:6px!important;line-height:7px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  body.inRace .fuelBtn small{display:none!important;}
+
+  /* FOCUS: completely opaque standalone screen. There is never a dock below it. */
+  body.v59Focus{overflow:hidden!important;background:#071019!important;}
+  body.v59Focus .mobileDock.mobilePro{display:none!important;}
+  body.inRace .focusOverlay,body>.focusOverlay{position:fixed!important;inset:0!important;width:100vw!important;max-width:100vw!important;height:100dvh!important;max-height:100dvh!important;margin:0!important;padding:8px!important;display:none!important;align-items:center!important;justify-content:center!important;background:#061019!important;opacity:1!important;backdrop-filter:none!important;z-index:99999!important;overflow:hidden!important;pointer-events:auto!important;}
+  body.inRace .focusOverlay.open,body>.focusOverlay.open{display:flex!important;}
+  body.inRace .focusCard,body>.focusOverlay .focusCard{position:relative!important;width:calc(100vw - 16px)!important;max-width:480px!important;min-width:0!important;max-height:calc(100dvh - 16px)!important;margin:0!important;padding:9px!important;background:#0b1722!important;opacity:1!important;border:1px solid #6b5b2f!important;border-radius:12px!important;box-shadow:none!important;overflow-y:auto!important;overflow-x:hidden!important;}
+  body.inRace .focusTop,body>.focusOverlay .focusTop{display:grid!important;grid-template-columns:minmax(0,1fr) 48px!important;gap:6px!important;align-items:start!important;}
+  body.inRace .focusKicker,body>.focusOverlay .focusKicker{font-size:6px!important;line-height:8px!important;}
+  body.inRace .focusTitle,body>.focusOverlay .focusTitle{font-size:14px!important;line-height:16px!important;}
+  body.inRace .focusText,body>.focusOverlay .focusText{font-size:7px!important;line-height:10px!important;}
+  body.inRace .focusTimer,body>.focusOverlay .focusTimer{width:48px!important;min-width:48px!important;padding:4px!important;}
+  body.inRace .focusTimer b,body>.focusOverlay .focusTimer b{font-size:18px!important;line-height:20px!important;}
+  body.inRace .focusChoices,body>.focusOverlay .focusChoices{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:5px!important;width:100%!important;margin:7px 0 0!important;}
+  body.inRace .focusChoices button,body>.focusOverlay .focusChoices button{position:static!important;inset:auto!important;transform:none!important;width:100%!important;max-width:100%!important;min-width:0!important;min-height:54px!important;height:auto!important;margin:0!important;padding:7px!important;background:#122536!important;opacity:1!important;border-radius:9px!important;overflow:visible!important;text-align:left!important;white-space:normal!important;}
+  body.inRace .focusChoices button strong,body>.focusOverlay .focusChoices button strong{display:block!important;font-size:9px!important;line-height:11px!important;white-space:normal!important;}
+  body.inRace .focusChoices button small,body>.focusOverlay .focusChoices button small{display:block!important;font-size:6px!important;line-height:8px!important;white-space:normal!important;overflow:visible!important;margin-top:2px!important;}
+  body.inRace .focusOutcome,body>.focusOverlay .focusOutcome{font-size:7px!important;line-height:9px!important;}
+  body.inRace #v45RaceClass{display:none!important;}
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  body.inRace .gamebox{bottom:184px!important;}
+  body.inRace .mobileDock.mobilePro{height:184px!important;min-height:184px!important;max-height:184px!important;grid-template-rows:21px 36px 43px 26px 36px!important;}
+  body.inRace .racePrompt{height:21px!important;min-height:21px!important;max-height:21px!important;}
+  body.inRace .mobilePrimary.proTactics,body.inRace .mobilePrimary.proTactics button{height:36px!important;min-height:36px!important;max-height:36px!important;}
+  body.inRace .powerConsole,body.inRace .powerConsole>*{height:43px!important;min-height:43px!important;max-height:43px!important;}
+  body.inRace .positionRow,body.inRace .positionRow button{height:26px!important;min-height:26px!important;max-height:26px!important;}
+  body.inRace .mobileInv.proFuel,body.inRace .mobileInv.proFuel button{height:36px!important;min-height:36px!important;max-height:36px!important;}
+}
+
+@media (orientation:landscape) and (max-height:560px) and (max-width:1100px){
+  body.inRace .gamebox{left:0!important;right:36vw!important;top:0!important;bottom:0!important;width:auto!important;min-width:0!important;height:100dvh!important;}
+  body.inRace .gamebox canvas#game{width:64vw!important;min-width:64vw!important;height:100%!important;}
+  body.inRace .mobileDock.mobilePro{left:64vw!important;right:0!important;top:0!important;bottom:0!important;width:36vw!important;min-width:36vw!important;max-width:36vw!important;height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important;grid-template-rows:22px 38px 45px 27px 38px!important;align-content:center!important;overflow-y:auto!important;}
+  body.inRace .v46Vitals,body.inRace .v46Vitals.v50Vitals{right:36vw!important;}
+  body.inRace .focusOverlay.open,body>.focusOverlay.open{width:100vw!important;height:100dvh!important;}
+  body.inRace .focusCard,body>.focusOverlay .focusCard{max-width:620px!important;}
+  body.inRace .focusChoices,body>.focusOverlay .focusChoices{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
+}
+
+/* V59 final specificity guards: override old ID-based mobile heights. */
+@media (max-width:1100px), (pointer:coarse){
+  body.inRace .mobilePrimary.proTactics #mContext,
+  body.inRace .mobilePrimary.proTactics #mFollow,
+  body.inRace .mobilePrimary.proTactics #mAttack,
+  body.inRace .mobilePrimary.proTactics #mSprint{
+    position:static!important;inset:auto!important;transform:none!important;
+    width:100%!important;height:38px!important;min-height:38px!important;max-height:38px!important;
+    margin:0!important;padding:2px 1px!important;display:flex!important;overflow:hidden!important;
+  }
+  body.inRace .powerConsole #mMinus,body.inRace .powerConsole #mPlus{
+    height:45px!important;min-height:45px!important;max-height:45px!important;margin:0!important;
+  }
+}
+@media (max-width:390px) and (orientation:portrait){
+  body.inRace .mobilePrimary.proTactics #mContext,
+  body.inRace .mobilePrimary.proTactics #mFollow,
+  body.inRace .mobilePrimary.proTactics #mAttack,
+  body.inRace .mobilePrimary.proTactics #mSprint{
+    height:36px!important;min-height:36px!important;max-height:36px!important;
+  }
+  body.inRace .powerConsole #mMinus,body.inRace .powerConsole #mPlus{
+    height:43px!important;min-height:43px!important;max-height:43px!important;
+  }
+}
+</style>
+</head><body><div class="wrap" id="app" tabindex="0">
+<div class="top"><div><div class="brand">ALUA <b>CYCLING CAREER</b> · V59</div><div class="sub">RACE IQ · FÍSICA · CARRERA · PROGRESIÓN</div></div><div class="btns"><button id="careerBtn" class="menuOnly">MI CICLISTA</button><button id="start" class="primary menuOnly">CORRER</button><button id="pause" class="raceOnly">PAUSA</button><button id="retire" class="danger raceOnly">RETIRARSE</button><button id="restart" style="display:none">REINICIAR</button><button id="soundBtn" class="soundOn">🔊 SONIDO</button><button id="labBtn" style="display:none">LAB</button></div></div>
 <div id="labSetup" class="labsetup" style="display:none!important"><div class="formgrid">
 <div class="field"><label>Masa ciclista+bici (kg)</label><input id="massIn" type="number" value="83" min="50" max="130" step="1"></div><div class="field"><label>Critical Power CP (W)</label><input id="cpIn" type="number" value="300" min="120" max="500" step="5"></div><div class="field"><label>W′ capacidad (kJ)</label><input id="wpIn" type="number" value="21" min="5" max="40" step="1"></div><div class="field"><label>VO₂max (ml/kg/min)</label><input id="vo2In" type="number" value="58" min="30" max="85" step="1"></div>
 <div class="field"><label>FC reposo</label><input id="hrRestIn" type="number" value="52" min="35" max="90" step="1"></div><div class="field"><label>FC máxima</label><input id="hrMaxIn" type="number" value="188" min="140" max="220" step="1"></div><div class="field"><label>CdA</label><input id="cdaIn" type="number" value="0.31" min="0.20" max="0.45" step="0.01"></div><div class="field"><label>Crr</label><input id="crrIn" type="number" value="0.004" min="0.002" max="0.010" step="0.0005"></div>
