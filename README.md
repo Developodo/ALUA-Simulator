@@ -1,3 +1,3 @@
-# ALUA Simulator V59 — Mobile Proportions
+# ALUA Simulator V60 — Mobile Fine Tune
 
-Revisión móvil centrada en proporciones: ancho completo del juego, perfil panorámico completo, dock sin solapes y FOCUS totalmente opaco y aislado de los controles.
+Ajuste fino móvil: margen seguro lateral, menú de decisiones con fondo transparente y botones opacos, contador reducido al número de cuenta atrás.

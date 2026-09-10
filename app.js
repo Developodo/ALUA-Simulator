@@ -1725,6 +1725,8 @@ startFocus=function(type,rival=null){
 const _v59CloseFocus=closeFocus;
 closeFocus=function(){V59Mobile.leaveFocus();return _v59CloseFocus()};
 window.addEventListener('resize',()=>{if(!V59Mobile.isMobile())V59Mobile.leaveFocus()},{passive:true});
-window.__ALUA_V59={version:'59',mobile:()=>({w:innerWidth,h:innerHeight,focus:document.body.classList.contains('v59Focus')})};
+window.__ALUA_V59={version:'60',mobile:()=>({w:innerWidth,h:innerHeight,focus:document.body.classList.contains('v59Focus')})};
 
 })();
+
+window.__ALUA_V60=window.__ALUA_V59;
