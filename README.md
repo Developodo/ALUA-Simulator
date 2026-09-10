@@ -1,11 +1,11 @@
-# ALUA Simulator V55
+# ALUA Simulator V56
 
-Base V53 CLEAN + motor/sprint V54 integrado correctamente + V55 de decisiones decisivas.
+Versión basada en V55 con revisión completa de interfaz móvil.
 
-Cambios principales:
-- Paso estrecho jugable: centro real, rueda-centro o ceder; ir abierto penaliza velocidad, W′ y fatiga.
-- W′ y fatiga reaccionan con más fuerza a ataques, persecuciones, relajarse y rueda.
-- Energía e hidratación muestran también la ingesta pendiente de absorción para que comer/beber sea visible de inmediato sin regalar glucógeno fisiológico instantáneo.
-- MOTOR AHORA: potencia disponible 5 s / 30 s / 60 s y tiempo aproximado al objetivo.
-- Sprint visible y accesible.
-- Clasificación flotante eliminada.
+- Layout móvil retrato unificado, sin desbordamiento horizontal.
+- Botones de táctica, potencia, posición y alimentación separados en filas estables.
+- Avituallamiento ya no usa posicionamiento fijo sobre otros botones.
+- Layout paisaje con juego a la izquierda y controles en panel lateral.
+- HUD, MOTOR AHORA, badges y FOCUS limitados al ancho disponible.
+- Se mantiene el motor y la lógica de carrera de V55.
+- Caché PWA actualizada a alua-v56.

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#071019"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><title>ALUA Simulator V49 · Clarity + Situational IQ</title>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#071019"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><title>ALUA Simulator V56 · Mobile Layout</title>
 <style>
 :root{--bg:#071019;--p:#0f1b27;--p2:#132332;--line:#294054;--txt:#eef4f8;--mut:#90a4b7;--acc:#b3267a;--good:#44d08a;--warn:#f0c450;--bad:#ff6c62;--cyan:#59c8f2}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;padding:10px}.wrap{max-width:1500px;margin:auto}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.brand{font-weight:950;letter-spacing:.08em}.brand b{color:#df4fa7}.sub{color:var(--mut);font-size:12px}.btns{display:flex;gap:6px;flex-wrap:wrap}button{border:1px solid #355069;background:#172737;color:#fff;border-radius:9px;padding:8px 11px;font-weight:850;cursor:pointer}.primary{background:var(--acc)}.danger{background:#6d2632}.grid{display:grid;grid-template-columns:1.7fr .85fr;gap:8px;margin-top:8px}.panel{background:var(--p);border:1px solid var(--line);border-radius:12px;padding:9px}.cards{display:grid;grid-template-columns:repeat(7,minmax(105px,1fr));gap:5px;margin:8px 0}.card{background:var(--p2);border:1px solid #2b4256;border-radius:9px;padding:6px 8px}.k{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}.v{font-size:17px;font-weight:950}.gamebox{border:1px solid #2d4558;border-radius:12px;overflow:hidden;background:#0a131c}canvas{width:100%;height:auto;display:block}.meters{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}.meter{display:grid;grid-template-columns:120px 1fr 62px;gap:6px;align-items:center;font-size:12px}.bar{height:8px;background:#263846;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%}.labs{display:grid;grid-template-columns:1fr 1fr;gap:5px}.lab{background:#101e2a;border:1px solid #2a4154;border-radius:9px;padding:7px}.lab .big{font-size:18px;font-weight:950}.lab small{color:var(--mut)}.controls{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:7px}.feed{background:#2f5b32}.water{background:#1f5c7b}.attack{background:#76254f}.sprint{background:#72580e}.follow{background:#334a61}.pickupReady{outline:3px solid #f3d35a;background:#6b5715!important}.msg{font-size:13px;font-weight:750;min-height:38px;margin-top:7px;color:#eef4f7}.event{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}.pill{padding:3px 8px;border-radius:99px;border:1px solid #79572b;background:#3a2b13;color:#ffe29b;font-weight:900}.labsetup{display:none;margin-top:8px;background:#0d1823;border:1px solid #30475a;border-radius:12px;padding:10px}.labsetup.open{display:block}.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.field label{display:block;font-size:10px;color:var(--mut);margin-bottom:3px}.field input{width:100%;background:#0b141e;border:1px solid #334b5f;color:#fff;border-radius:7px;padding:7px;font-size:14px}.note{font-size:11px;color:var(--mut);line-height:1.4}.strategy{margin-top:6px;font-size:12px;line-height:1.35}.warn{color:#ffd26a}.bad{color:#ff827a}.good{color:#70dda4}@media(max-width:1100px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(4,1fr)}.formgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}.labs{grid-template-columns:1fr}.controls{grid-template-columns:repeat(2,1fr)}.meters{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.meter{grid-template-columns:95px 1fr 54px}}
 
@@ -373,8 +373,161 @@ body{background:radial-gradient(circle at 50% -20%,#173b55 0,#07131e 42%,#03070c
 @media(max-width:760px){.inRace .v46Vitals.v50Vitals{bottom:4px!important;gap:3px!important}.v50Vital{padding:4px 5px!important;border-radius:8px!important}.v50Top b{font-size:9px!important}.v50Top span{font-size:4.8px!important}.v50Sub{height:7px!important}.v50Sub small,.v50Sub strong{font-size:4.4px!important}.v50Vital i{height:2.5px!important;margin-top:2px!important}}
 @media(max-width:390px){.v50Sub strong{display:none}.v50Top b{font-size:8.5px!important}}
 
-#v45RaceClass{display:none!important}</style></head><body><div class="wrap" id="app" tabindex="0">
-<div class="top"><div><div class="brand">ALUA <b>CYCLING CAREER</b> · V53 CLEAN</div><div class="sub">RACE IQ · FÍSICA · CARRERA · PROGRESIÓN</div></div><div class="btns"><button id="careerBtn" class="menuOnly">MI CICLISTA</button><button id="start" class="primary menuOnly">CORRER</button><button id="pause" class="raceOnly">PAUSA</button><button id="retire" class="danger raceOnly">RETIRARSE</button><button id="restart" style="display:none">REINICIAR</button><button id="soundBtn" class="soundOn">🔊 SONIDO</button><button id="labBtn" style="display:none">LAB</button></div></div>
+#v45RaceClass{display:none!important}
+/* migrated V54 overrides */
+/* V54 final overrides */
+#v45RaceClass{display:none!important}
+#mSprint,#mAttack{display:flex!important}
+.inRace #mSprint,.inRace #mAttack{display:flex!important}
+@media(max-width:760px){
+ .inRace .proTactics{grid-template-columns:1.05fr .92fr .92fr .92fr!important}
+ .inRace #mAttack,.inRace #mSprint{display:flex!important}
+ .inRace .proTactics button{font-size:7.4px!important;padding:2px!important}
+}
+.v54PowerReserve{position:absolute;z-index:25;right:8px;top:72px;display:flex;gap:5px;align-items:center;padding:5px 8px;border-radius:999px;background:rgba(4,11,17,.82);border:1px solid rgba(126,178,205,.35);backdrop-filter:blur(8px);font-size:7px;font-weight:900;color:#b8cad5;white-space:nowrap;pointer-events:none}
+.v54PowerReserve b{color:#fff;font-size:8px}.v54PowerReserve strong{color:#ffd45a;font-size:8px}.v54PowerReserve.limited{border-color:rgba(255,108,98,.62)}
+@media(max-width:760px){.v54PowerReserve{top:66px;right:5px;max-width:78%;font-size:6px;padding:4px 6px}.v54PowerReserve b,.v54PowerReserve strong{font-size:7px}}
+@media(orientation:landscape) and (max-height:520px){.v54PowerReserve{right:40%;top:64px}}
+
+
+/* =========================================================
+   V56 · MOBILE LAYOUT RESET
+   One authoritative mobile layout: no horizontal overflow,
+   no fixed pickup over buttons, clean portrait + landscape.
+   ========================================================= */
+html,body,#app,.wrap{max-width:100%;}
+html,body{overflow-x:hidden!important;}
+body.inRace,#app.inRace{width:100vw!important;max-width:100vw!important;}
+.inRace .gamebox,.inRace .mobileDock,.inRace .mobilehud,.inRace .v46Vitals{box-sizing:border-box!important;max-width:100%!important;}
+.inRace button{min-width:0!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis;}
+.inRace .mobileDock *{min-width:0;}
+
+@media (max-width:760px) and (orientation:portrait){
+  body.inRace,#app.inRace,.inRace .wrap,.inRace #mainGrid{width:100vw!important;height:100dvh!important;overflow:hidden!important;}
+  .inRace .gamebox{position:fixed!important;left:0!important;right:0!important;top:0!important;bottom:176px!important;width:100vw!important;height:auto!important;min-height:0!important;overflow:hidden!important;}
+  .inRace .gamebox canvas{width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;object-fit:cover!important;}
+
+  .inRace .mobileDock.mobilePro{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100vw!important;height:176px!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:43px 43px 31px 43px!important;gap:3px!important;padding:4px 5px calc(4px + env(safe-area-inset-bottom))!important;overflow:hidden!important;}
+  .inRace .racePrompt,.inRace .powerSlider,.inRace .fuelTitle{display:none!important;}
+
+  .inRace .mobilePrimary.proTactics{display:grid!important;grid-row:1!important;grid-template-columns:1.12fr repeat(3,minmax(0,1fr))!important;gap:3px!important;height:43px!important;margin:0!important;}
+  .inRace .proTactics button,.inRace .proTactics #mFollow,.inRace .proTactics #mAttack,.inRace .proTactics #mSprint,.inRace .proTactics #mContext{display:flex!important;height:43px!important;min-height:43px!important;padding:2px 2px!important;border-radius:8px!important;font-size:7.1px!important;line-height:1!important;white-space:normal!important;align-items:center!important;justify-content:center!important;}
+  .inRace .proTactics button span{font-size:12px!important;}
+  .inRace .proTactics .heroAction{font-size:8px!important;}
+
+  .inRace .powerConsole{display:grid!important;grid-row:2!important;grid-template-columns:45px minmax(0,1fr) 45px!important;gap:3px!important;height:43px!important;margin:0!important;}
+  .inRace .powerStep{height:43px!important;min-height:43px!important;padding:1px!important;border-radius:8px!important;}
+  .inRace .powerStep b{font-size:16px!important;}
+  .inRace .powerStep small{font-size:5.5px!important;}
+  .inRace .powerCore{height:43px!important;min-height:43px!important;padding:1px 3px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:3px!important;overflow:hidden!important;}
+  .inRace .powerCore strong{font-size:24px!important;line-height:1!important;}
+  .inRace .powerCore em{font-size:8px!important;}
+  .inRace .powerZone{font-size:5.5px!important;padding:1px 4px!important;margin:0!important;white-space:nowrap!important;}
+
+  .inRace .positionRow{display:grid!important;grid-row:3!important;position:static!important;height:31px!important;min-height:31px!important;margin:0!important;gap:3px!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;}
+  .inRace .positionRow button{position:static!important;transform:none!important;width:auto!important;height:31px!important;min-height:31px!important;padding:1px 3px!important;border-radius:7px!important;font-size:10px!important;}
+  .inRace .positionRow #mPickup.contextHidden{display:none!important;}
+  .inRace .positionRow #mPickup.contextVisible{display:flex!important;position:static!important;left:auto!important;right:auto!important;bottom:auto!important;transform:none!important;width:auto!important;height:31px!important;min-height:31px!important;z-index:auto!important;}
+  .inRace .positionRow:has(#mPickup.contextVisible){grid-template-columns:minmax(0,.8fr) minmax(0,1.25fr) minmax(0,.8fr)!important;}
+  .inRace .positionRow:has(#mPickup.contextVisible) #mLeft{grid-column:1!important;}
+  .inRace .positionRow:has(#mPickup.contextVisible) #mPickup{grid-column:2!important;}
+  .inRace .positionRow:has(#mPickup.contextVisible) #mRight{grid-column:3!important;}
+
+  .inRace .mobileInv.proFuel{display:grid!important;grid-row:4!important;position:static!important;left:auto!important;right:auto!important;bottom:auto!important;width:100%!important;height:43px!important;margin:0!important;grid-template-columns:minmax(0,1.15fr) minmax(0,1.35fr) 40px 40px!important;gap:3px!important;}
+  .inRace .proFuel button{height:43px!important;min-height:43px!important;padding:2px!important;border-radius:8px!important;}
+  .inRace .fuelBtn{grid-template-columns:16px minmax(0,1fr) auto!important;column-gap:2px!important;}
+  .inRace .fuelBtn .fuelIcon{font-size:12px!important;}
+  .inRace .fuelBtn b{font-size:7px!important;white-space:nowrap!important;}
+  .inRace .fuelBtn strong{font-size:7px!important;white-space:nowrap!important;}
+  .inRace .fuelBtn small{display:none!important;}
+  .inRace .pauseBtn{font-size:12px!important;padding:1px!important;}
+  .inRace .pauseBtn small{font-size:5px!important;}
+  .inRace #mBar{display:none!important;}
+
+  .inRace .mobilehud{display:grid!important;position:absolute!important;left:4px!important;right:4px!important;top:4px!important;width:auto!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;}
+  .inRace .mh{min-width:0!important;padding:3px 2px!important;overflow:hidden!important;}
+  .inRace .mh small{font-size:5.5px!important;}
+  .inRace .mh b{display:block!important;font-size:10px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  .inRace .raceTimer{top:37px!important;right:5px!important;max-width:62vw!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  .inRace .v54PowerReserve{left:5px!important;right:5px!important;top:61px!important;width:auto!important;max-width:none!important;justify-content:center!important;gap:3px!important;white-space:normal!important;flex-wrap:wrap!important;padding:3px 5px!important;font-size:5.5px!important;line-height:1.05!important;}
+  .inRace .v54PowerReserve b,.inRace .v54PowerReserve strong{font-size:6px!important;}
+  .inRace .v48WindBadge{top:38px!important;right:5px!important;max-width:28vw!important;}
+  .inRace .v48LimitBadge{top:38px!important;left:5px!important;right:auto!important;max-width:54vw!important;}
+
+  .inRace .v46Vitals.v50Vitals,.inRace .v46Vitals{left:5px!important;right:5px!important;bottom:5px!important;width:auto!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important;}
+  .inRace .v50Vital{min-width:0!important;padding:3px 4px!important;overflow:hidden!important;}
+  .inRace .v50Top,.inRace .v50Sub{gap:2px!important;min-width:0!important;}
+  .inRace .v50Top b{font-size:8px!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+  .inRace .v50Top span{font-size:4.4px!important;}
+  .inRace .v50Sub small,.inRace .v50Sub strong{font-size:4px!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+
+  .inRace .focusOverlay{padding:6px!important;align-items:flex-end!important;}
+  .inRace .focusCard{width:100%!important;max-width:100%!important;max-height:76dvh!important;overflow:auto!important;padding:9px!important;}
+  .inRace .focusTop{gap:5px!important;}
+  .inRace .focusTitle{font-size:15px!important;}
+  .inRace .focusText{font-size:8px!important;max-height:none!important;}
+  .inRace .focusChoices{grid-template-columns:1fr!important;gap:5px!important;}
+  .inRace .focusChoices button{width:100%!important;min-height:52px!important;height:auto!important;padding:7px 8px!important;}
+  .inRace .focusChoices button small{max-height:none!important;overflow:visible!important;}
+}
+
+@media (max-width:390px) and (orientation:portrait){
+  .inRace .gamebox{bottom:168px!important;}
+  .inRace .mobileDock.mobilePro{height:168px!important;grid-template-rows:41px 41px 29px 41px!important;gap:2px!important;padding:3px 4px calc(3px + env(safe-area-inset-bottom))!important;}
+  .inRace .mobilePrimary.proTactics,.inRace .proTactics button,.inRace .powerConsole,.inRace .powerStep,.inRace .powerCore,.inRace .mobileInv.proFuel,.inRace .proFuel button{height:41px!important;min-height:41px!important;}
+  .inRace .positionRow,.inRace .positionRow button,.inRace .positionRow #mPickup.contextVisible{height:29px!important;min-height:29px!important;}
+  .inRace .powerConsole{grid-template-columns:41px minmax(0,1fr) 41px!important;}
+  .inRace .powerCore strong{font-size:21px!important;}
+  .inRace .proTactics button{font-size:6.4px!important;}
+  .inRace .mobileInv.proFuel{grid-template-columns:minmax(0,1.05fr) minmax(0,1.25fr) 36px 36px!important;}
+  .inRace .v54PowerReserve{top:59px!important;font-size:5px!important;}
+  .inRace .v50Sub strong{display:none!important;}
+}
+
+@media (orientation:landscape) and (max-height:520px){
+  body.inRace,#app.inRace,.inRace .wrap,.inRace #mainGrid{width:100vw!important;height:100dvh!important;overflow:hidden!important;}
+  .inRace .gamebox{position:fixed!important;left:0!important;top:0!important;bottom:0!important;right:38vw!important;width:auto!important;height:100dvh!important;min-height:0!important;}
+  .inRace .gamebox canvas{width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;object-fit:cover!important;}
+  .inRace .mobileDock.mobilePro{position:fixed!important;left:auto!important;right:0!important;top:0!important;bottom:0!important;width:38vw!important;max-width:38vw!important;height:100dvh!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto 48px 52px 34px 48px!important;gap:4px!important;padding:4px calc(4px + env(safe-area-inset-right)) 4px 4px!important;overflow-y:auto!important;overflow-x:hidden!important;}
+  .inRace .racePrompt{display:flex!important;grid-row:1!important;height:auto!important;min-height:28px!important;padding:2px!important;}
+  .inRace .racePrompt b{font-size:8px!important;}
+  .inRace .racePrompt span{font-size:6px!important;padding:2px 4px!important;}
+  .inRace .mobilePrimary.proTactics{grid-row:2!important;display:grid!important;grid-template-columns:1.12fr repeat(3,minmax(0,1fr))!important;gap:3px!important;height:48px!important;margin:0!important;}
+  .inRace .proTactics button,.inRace .proTactics #mContext,.inRace .proTactics #mFollow,.inRace .proTactics #mAttack,.inRace .proTactics #mSprint{display:flex!important;height:48px!important;min-height:48px!important;padding:2px!important;font-size:6.4px!important;}
+  .inRace .proTactics button span{font-size:11px!important;}
+  .inRace .powerConsole{grid-row:3!important;display:grid!important;grid-template-columns:43px minmax(0,1fr) 43px!important;height:52px!important;gap:3px!important;}
+  .inRace .powerStep,.inRace .powerCore{height:52px!important;min-height:52px!important;}
+  .inRace .powerCore strong{font-size:23px!important;}
+  .inRace .positionRow{grid-row:4!important;display:grid!important;position:static!important;height:34px!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:3px!important;margin:0!important;}
+  .inRace .positionRow button,.inRace .positionRow #mPickup.contextVisible{position:static!important;transform:none!important;width:auto!important;height:34px!important;min-height:34px!important;bottom:auto!important;left:auto!important;}
+  .inRace .positionRow:has(#mPickup.contextVisible){grid-template-columns:minmax(0,.8fr) minmax(0,1.25fr) minmax(0,.8fr)!important;}
+  .inRace .positionRow:has(#mPickup.contextVisible) #mLeft{grid-column:1!important}.inRace .positionRow:has(#mPickup.contextVisible) #mPickup{grid-column:2!important}.inRace .positionRow:has(#mPickup.contextVisible) #mRight{grid-column:3!important}
+  .inRace .mobileInv.proFuel{grid-row:5!important;display:grid!important;position:static!important;width:100%!important;height:48px!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) 38px 38px!important;gap:3px!important;margin:0!important;}
+  .inRace .proFuel button{height:48px!important;min-height:48px!important;padding:2px!important;}
+  .inRace .fuelBtn{grid-template-columns:14px minmax(0,1fr) auto!important;}
+  .inRace .fuelBtn .fuelIcon{font-size:11px!important}.inRace .fuelBtn b,.inRace .fuelBtn strong{font-size:6.2px!important}.inRace .fuelBtn small{display:none!important}.inRace .pauseBtn{font-size:11px!important}.inRace #mBar{display:none!important;}
+  .inRace .powerSlider,.inRace .fuelTitle{display:none!important;}
+
+  .inRace .mobilehud{left:4px!important;right:4px!important;width:auto!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+  .inRace .raceTimer{right:5px!important;max-width:48%!important;}
+  .inRace .v54PowerReserve{left:5px!important;right:5px!important;top:61px!important;max-width:none!important;width:auto!important;justify-content:center!important;white-space:normal!important;flex-wrap:wrap!important;}
+  .inRace .v48WindBadge{right:5px!important;}
+  .inRace .v48LimitBadge{left:5px!important;max-width:58%!important;}
+  .inRace .v46Vitals,.inRace .v46Vitals.v50Vitals{left:5px!important;right:5px!important;bottom:5px!important;width:auto!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;}
+  .inRace .focusOverlay{right:0!important;left:0!important;padding:6px!important;}
+  .inRace .focusCard{width:min(96%,600px)!important;max-width:96%!important;max-height:94dvh!important;overflow:auto!important;}
+}
+
+/* Non-race mobile screens must never force document width. */
+@media(max-width:760px){
+  body:not(.inRace),#app:not(.inRace),.wrap,.careerOverlay,.careerSheet,.v45Onboarding,.v45OnboardCard{max-width:100vw!important;overflow-x:hidden!important;}
+  .careerTabs{max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;flex-wrap:nowrap!important;-webkit-overflow-scrolling:touch;}
+  .careerTabs button{min-width:88px!important;flex:0 0 auto!important;}
+  .v45RiderHero,.v45CreateGrid,.v45BioGrid,.v45UpgradeGrid,.v46Mechanics,.v46PowerGrid,.v46WeekSecondary{min-width:0!important;max-width:100%!important;}
+}
+
+</style></head><body><div class="wrap" id="app" tabindex="0">
+<div class="top"><div><div class="brand">ALUA <b>CYCLING CAREER</b> · V56</div><div class="sub">RACE IQ · FÍSICA · CARRERA · PROGRESIÓN</div></div><div class="btns"><button id="careerBtn" class="menuOnly">MI CICLISTA</button><button id="start" class="primary menuOnly">CORRER</button><button id="pause" class="raceOnly">PAUSA</button><button id="retire" class="danger raceOnly">RETIRARSE</button><button id="restart" style="display:none">REINICIAR</button><button id="soundBtn" class="soundOn">🔊 SONIDO</button><button id="labBtn" style="display:none">LAB</button></div></div>
 <div id="labSetup" class="labsetup" style="display:none!important"><div class="formgrid">
 <div class="field"><label>Masa ciclista+bici (kg)</label><input id="massIn" type="number" value="83" min="50" max="130" step="1"></div><div class="field"><label>Critical Power CP (W)</label><input id="cpIn" type="number" value="300" min="120" max="500" step="5"></div><div class="field"><label>W′ capacidad (kJ)</label><input id="wpIn" type="number" value="21" min="5" max="40" step="1"></div><div class="field"><label>VO₂max (ml/kg/min)</label><input id="vo2In" type="number" value="58" min="30" max="85" step="1"></div>
 <div class="field"><label>FC reposo</label><input id="hrRestIn" type="number" value="52" min="35" max="90" step="1"></div><div class="field"><label>FC máxima</label><input id="hrMaxIn" type="number" value="188" min="140" max="220" step="1"></div><div class="field"><label>CdA</label><input id="cdaIn" type="number" value="0.31" min="0.20" max="0.45" step="0.01"></div><div class="field"><label>Crr</label><input id="crrIn" type="number" value="0.004" min="0.002" max="0.010" step="0.0005"></div>
@@ -434,18 +587,4 @@ body{background:radial-gradient(circle at 50% -20%,#173b55 0,#07131e 42%,#03070c
  <div class="mobileInv proFuel"><button id="mGel" class="feed fuelBtn"><span class="fuelIcon">⚡</span><b>GEL</b><small>30 g CHO</small><strong>×3</strong></button><button id="mWater" class="water fuelBtn"><span class="fuelIcon">💧</span><b>AGUA</b><small>150 ml / trago</small><strong>1000 ml</strong></button><button id="mBar" class="feed fuelBtn"><span class="fuelIcon">🍫</span><b>BARRITA</b><small>45 g CHO</small><strong>×1</strong></button><button id="mPause" class="pauseBtn">Ⅱ<small>PAUSA</small></button><button id="mRetire" class="pauseBtn retireBtn">✕<small>RETIRAR</small></button></div>
 </div>
 </div>
-<script src="./app.js"></script></body></html><style id="v54-css">
-/* V54 final overrides */
-#v45RaceClass{display:none!important}
-#mSprint,#mAttack{display:flex!important}
-.inRace #mSprint,.inRace #mAttack{display:flex!important}
-@media(max-width:760px){
- .inRace .proTactics{grid-template-columns:1.05fr .92fr .92fr .92fr!important}
- .inRace #mAttack,.inRace #mSprint{display:flex!important}
- .inRace .proTactics button{font-size:7.4px!important;padding:2px!important}
-}
-.v54PowerReserve{position:absolute;z-index:25;right:8px;top:72px;display:flex;gap:5px;align-items:center;padding:5px 8px;border-radius:999px;background:rgba(4,11,17,.82);border:1px solid rgba(126,178,205,.35);backdrop-filter:blur(8px);font-size:7px;font-weight:900;color:#b8cad5;white-space:nowrap;pointer-events:none}
-.v54PowerReserve b{color:#fff;font-size:8px}.v54PowerReserve strong{color:#ffd45a;font-size:8px}.v54PowerReserve.limited{border-color:rgba(255,108,98,.62)}
-@media(max-width:760px){.v54PowerReserve{top:66px;right:5px;max-width:78%;font-size:6px;padding:4px 6px}.v54PowerReserve b,.v54PowerReserve strong{font-size:7px}}
-@media(orientation:landscape) and (max-height:520px){.v54PowerReserve{right:40%;top:64px}}
-</style>
+<script src="./app.js"></script></body></html>
