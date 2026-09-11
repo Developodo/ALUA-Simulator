@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#071019"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><title>ALUA Simulator V60 · Mobile Fine Tune</title>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#071019"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="manifest" href="manifest.webmanifest"><title>ALUA Simulator V61 · Mobile Scale</title>
 <style>
 :root{--bg:#071019;--p:#0f1b27;--p2:#132332;--line:#294054;--txt:#eef4f8;--mut:#90a4b7;--acc:#b3267a;--good:#44d08a;--warn:#f0c450;--bad:#ff6c62;--cyan:#59c8f2}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;padding:10px}.wrap{max-width:1500px;margin:auto}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.brand{font-weight:950;letter-spacing:.08em}.brand b{color:#df4fa7}.sub{color:var(--mut);font-size:12px}.btns{display:flex;gap:6px;flex-wrap:wrap}button{border:1px solid #355069;background:#172737;color:#fff;border-radius:9px;padding:8px 11px;font-weight:850;cursor:pointer}.primary{background:var(--acc)}.danger{background:#6d2632}.grid{display:grid;grid-template-columns:1.7fr .85fr;gap:8px;margin-top:8px}.panel{background:var(--p);border:1px solid var(--line);border-radius:12px;padding:9px}.cards{display:grid;grid-template-columns:repeat(7,minmax(105px,1fr));gap:5px;margin:8px 0}.card{background:var(--p2);border:1px solid #2b4256;border-radius:9px;padding:6px 8px}.k{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}.v{font-size:17px;font-weight:950}.gamebox{border:1px solid #2d4558;border-radius:12px;overflow:hidden;background:#0a131c}canvas{width:100%;height:auto;display:block}.meters{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}.meter{display:grid;grid-template-columns:120px 1fr 62px;gap:6px;align-items:center;font-size:12px}.bar{height:8px;background:#263846;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%}.labs{display:grid;grid-template-columns:1fr 1fr;gap:5px}.lab{background:#101e2a;border:1px solid #2a4154;border-radius:9px;padding:7px}.lab .big{font-size:18px;font-weight:950}.lab small{color:var(--mut)}.controls{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:7px}.feed{background:#2f5b32}.water{background:#1f5c7b}.attack{background:#76254f}.sprint{background:#72580e}.follow{background:#334a61}.pickupReady{outline:3px solid #f3d35a;background:#6b5715!important}.msg{font-size:13px;font-weight:750;min-height:38px;margin-top:7px;color:#eef4f7}.event{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:12px}.pill{padding:3px 8px;border-radius:99px;border:1px solid #79572b;background:#3a2b13;color:#ffe29b;font-weight:900}.labsetup{display:none;margin-top:8px;background:#0d1823;border:1px solid #30475a;border-radius:12px;padding:10px}.labsetup.open{display:block}.formgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.field label{display:block;font-size:10px;color:var(--mut);margin-bottom:3px}.field input{width:100%;background:#0b141e;border:1px solid #334b5f;color:#fff;border-radius:7px;padding:7px;font-size:14px}.note{font-size:11px;color:var(--mut);line-height:1.4}.strategy{margin-top:6px;font-size:12px;line-height:1.35}.warn{color:#ffd26a}.bad{color:#ff827a}.good{color:#70dda4}@media(max-width:1100px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(4,1fr)}.formgrid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){.cards{grid-template-columns:repeat(2,1fr)}.labs{grid-template-columns:1fr}.controls{grid-template-columns:repeat(2,1fr)}.meters{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.meter{grid-template-columns:95px 1fr 54px}}
 
@@ -966,8 +966,43 @@ body.inRace,#app.inRace{width:100vw!important;max-width:100vw!important;}
   body.inRace .focusText,body>.focusOverlay .focusText{font-size:6.5px!important;line-height:9px!important;}
 }
 </style>
+
+<style id="v61ScaleOnly">
+/* V61: scale-only correction. Preserve controls/decisions; keep the whole race image inside the visible width. */
+@media (max-width:1400px), (pointer:coarse){
+  body.inRace .gamebox{left:10px!important;right:10px!important;width:auto!important;max-width:none!important;}
+  body.inRace .gamebox canvas#game{left:0!important;right:0!important;width:100%!important;min-width:0!important;max-width:100%!important;transform:none!important;object-fit:fill!important;object-position:center center!important;}
+  body.inRace .v46Vitals,body.inRace .v46Vitals.v50Vitals{left:10px!important;right:10px!important;width:auto!important;}
+}
+@media (max-width:430px){
+  body.inRace .gamebox{left:12px!important;right:12px!important;}
+  body.inRace .v46Vitals,body.inRace .v46Vitals.v50Vitals{left:12px!important;right:12px!important;}
+}
+</style>
+
+<style id="v62ProportionFix">
+/* V62: proportion correction only. Shrink the rendered race world horizontally so the full logical canvas is visible. */
+@media (max-width:1100px), (pointer:coarse){
+  body.inRace .gamebox{
+    left:8px!important; right:8px!important; width:auto!important;
+    background:#071019!important; overflow:hidden!important;
+  }
+  body.inRace .gamebox canvas#game{
+    position:absolute!important;
+    left:2.5%!important; right:auto!important;
+    width:95%!important; min-width:0!important; max-width:95%!important;
+    height:100%!important;
+    object-fit:fill!important; object-position:center center!important;
+    transform:none!important;
+  }
+}
+@media (max-width:430px){
+  body.inRace .gamebox{left:7px!important;right:7px!important;}
+  body.inRace .gamebox canvas#game{left:3%!important;width:94%!important;max-width:94%!important;}
+}
+</style>
 </head><body><div class="wrap" id="app" tabindex="0">
-<div class="top"><div><div class="brand">ALUA <b>CYCLING CAREER</b> · V60</div><div class="sub">RACE IQ · FÍSICA · CARRERA · PROGRESIÓN</div></div><div class="btns"><button id="careerBtn" class="menuOnly">MI CICLISTA</button><button id="start" class="primary menuOnly">CORRER</button><button id="pause" class="raceOnly">PAUSA</button><button id="retire" class="danger raceOnly">RETIRARSE</button><button id="restart" style="display:none">REINICIAR</button><button id="soundBtn" class="soundOn">🔊 SONIDO</button><button id="labBtn" style="display:none">LAB</button></div></div>
+<div class="top"><div><div class="brand">ALUA <b>CYCLING CAREER</b> · V64</div><div class="sub">RACE IQ · FÍSICA · CARRERA · PROGRESIÓN</div></div><div class="btns"><button id="careerBtn" class="menuOnly">MI CICLISTA</button><button id="start" class="primary menuOnly">CORRER</button><button id="pause" class="raceOnly">PAUSA</button><button id="retire" class="danger raceOnly">RETIRARSE</button><button id="restart" style="display:none">REINICIAR</button><button id="soundBtn" class="soundOn">🔊 SONIDO</button><button id="labBtn" style="display:none">LAB</button></div></div>
 <div id="labSetup" class="labsetup" style="display:none!important"><div class="formgrid">
 <div class="field"><label>Masa ciclista+bici (kg)</label><input id="massIn" type="number" value="83" min="50" max="130" step="1"></div><div class="field"><label>Critical Power CP (W)</label><input id="cpIn" type="number" value="300" min="120" max="500" step="5"></div><div class="field"><label>W′ capacidad (kJ)</label><input id="wpIn" type="number" value="21" min="5" max="40" step="1"></div><div class="field"><label>VO₂max (ml/kg/min)</label><input id="vo2In" type="number" value="58" min="30" max="85" step="1"></div>
 <div class="field"><label>FC reposo</label><input id="hrRestIn" type="number" value="52" min="35" max="90" step="1"></div><div class="field"><label>FC máxima</label><input id="hrMaxIn" type="number" value="188" min="140" max="220" step="1"></div><div class="field"><label>CdA</label><input id="cdaIn" type="number" value="0.31" min="0.20" max="0.45" step="0.01"></div><div class="field"><label>Crr</label><input id="crrIn" type="number" value="0.004" min="0.002" max="0.010" step="0.0005"></div>

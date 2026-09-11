@@ -613,12 +613,12 @@ function buildProfileCache(){
 function gradeColor(g){return g>=8?'#ff655d':g>=5?'#ff9d52':g>=2?'#f0cf58':g<=-6?'#59b8ff':g<=-2?'#69d4d0':'#7fd38a'}
 function profile(){
  let pc=profileCache;if(!pc||pc.key!==stageType+'|'+routeTag+'|'+TOTAL)pc=buildProfileCache();
- const mobileProfile=window.matchMedia&&window.matchMedia('(max-width:1100px), (pointer:coarse)').matches;
- let x0=mobileProfile?10:18,y0=mobileProfile?86:16,w=mobileProfile?(C.width-20):Math.min(690,C.width*.49),h=mobileProfile?142:166,padL=mobileProfile?22:18,padR=mobileProfile?16:14,top=mobileProfile?34:42,bottom=23,plotH=h-top-bottom;
+ const mobileProfile=document.body.classList.contains('inRace') || (window.matchMedia&&window.matchMedia('(max-width:1400px), (pointer:coarse)').matches);
+ let x0=mobileProfile?34:18,y0=mobileProfile?86:16,w=mobileProfile?(C.width-68):Math.min(690,C.width*.49),h=mobileProfile?142:166,padL=mobileProfile?26:18,padR=mobileProfile?26:14,top=mobileProfile?34:42,bottom=23,plotH=h-top-bottom;
  ctx.save();ctx.shadowColor='rgba(0,0,0,.38)';ctx.shadowBlur=16;ctx.fillStyle='rgba(4,10,16,.91)';ctx.beginPath();ctx.roundRect(x0,y0,w,h,16);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='rgba(135,184,214,.34)';ctx.lineWidth=1;ctx.stroke();
- ctx.fillStyle='#fff';ctx.font=mobileProfile?'900 24px system-ui':'900 13px system-ui';ctx.textAlign='left';ctx.fillText((stageType==='CRI'?'CRI · ':'')+routeTag.toUpperCase(),x0+14,y0+19);
- let rem=Math.max(0,TOTAL-P.km),remTxt=rem<1?Math.round(rem*1000)+' m':rem.toFixed(1)+' km';ctx.fillStyle='#ff67b4';ctx.font=mobileProfile?'900 24px system-ui':'900 13px system-ui';ctx.textAlign='right';ctx.fillText(P.pos+'º  ·  '+remTxt+' A META',x0+w-14,y0+19);
- ctx.fillStyle='#8ea7b8';ctx.font=mobileProfile?'800 17px system-ui':'800 9px system-ui';ctx.textAlign='left';ctx.fillText(Math.round(pc.gain)+' m+  ·  '+TOTAL.toFixed(1)+' km  ·  perfil real acumulado',x0+14,y0+34);
+ ctx.fillStyle='#fff';ctx.font=mobileProfile?'900 20px system-ui':'900 13px system-ui';ctx.textAlign='left';ctx.fillText((stageType==='CRI'?'CRI · ':'')+routeTag.toUpperCase(),x0+14,y0+19);
+ let rem=Math.max(0,TOTAL-P.km),remTxt=rem<1?Math.round(rem*1000)+' m':rem.toFixed(1)+' km';ctx.fillStyle='#ff67b4';ctx.font=mobileProfile?'900 20px system-ui':'900 13px system-ui';ctx.textAlign='right';ctx.fillText(P.pos+'º  ·  '+remTxt+' A META',x0+w-14,y0+19);
+ ctx.fillStyle='#8ea7b8';ctx.font=mobileProfile?'800 14px system-ui':'800 9px system-ui';ctx.textAlign='left';ctx.fillText(Math.round(pc.gain)+' m+  ·  '+TOTAL.toFixed(1)+' km  ·  perfil real acumulado',x0+14,y0+34);
  let min=pc.min,max=pc.max,range=Math.max(35,max-min),px0=x0+padL,px1=x0+w-padR,base=y0+h-bottom;
  // subtle altitude grid
  ctx.font=mobileProfile?'700 14px system-ui':'700 8px system-ui';for(let j=0;j<3;j++){let yy=y0+top+j*plotH/2;ctx.strokeStyle='rgba(255,255,255,.07)';ctx.beginPath();ctx.moveTo(px0,yy);ctx.lineTo(px1,yy);ctx.stroke();let av=max-j*range/2;ctx.fillStyle='rgba(185,207,220,.58)';ctx.textAlign='left';ctx.fillText(Math.round(av)+'m',px0+2,yy-3)}
@@ -628,7 +628,7 @@ function profile(){
  // grade-colored profile line
  ctx.lineWidth=3;for(let i=1;i<pc.pts.length;i++){let a=pc.pts[i-1],b=pc.pts[i];ctx.strokeStyle=gradeColor((a.g+b.g)/2);ctx.beginPath();ctx.moveTo(X(a.km),Y(a.alt));ctx.lineTo(X(b.km),Y(b.alt));ctx.stroke()}
  // climb labels / category blocks
- for(const c of climbs){let cx=(X(c.a)+X(c.b))/2,cy=Y(pc.pts[Math.min(pc.pts.length-1,Math.round(((c.a+c.b)/2)/TOTAL*(pc.pts.length-1)))].alt);ctx.fillStyle='rgba(255,110,84,.18)';ctx.fillRect(X(c.a),y0+top,X(c.b)-X(c.a),plotH);ctx.fillStyle='#ffd0bd';ctx.font=mobileProfile?'900 14px system-ui':'900 8px system-ui';ctx.textAlign='center';ctx.fillText(c.n.length>16?c.n.slice(0,15)+'…':c.n,cx,Math.max(y0+top+9,cy-8));}
+ for(const c of climbs){let cx=(X(c.a)+X(c.b))/2,cy=Y(pc.pts[Math.min(pc.pts.length-1,Math.round(((c.a+c.b)/2)/TOTAL*(pc.pts.length-1)))].alt);ctx.fillStyle='rgba(255,110,84,.18)';ctx.fillRect(X(c.a),y0+top,X(c.b)-X(c.a),plotH);ctx.fillStyle='#ffd0bd';ctx.font=mobileProfile?'900 12px system-ui':'900 8px system-ui';ctx.textAlign='center';ctx.fillText(c.n.length>16?c.n.slice(0,15)+'…':c.n,cx,Math.max(y0+top+9,cy-8));}
  for(const d of descents){ctx.fillStyle='rgba(76,173,255,.10)';ctx.fillRect(X(d.a),y0+top,X(d.b)-X(d.a),plotH)}
  // feed zones
  for(const f of feeds){let fx=X(f.km);ctx.strokeStyle='#f2cf54';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(fx,y0+top);ctx.lineTo(fx,base);ctx.stroke();ctx.fillStyle='#f2cf54';ctx.font=mobileProfile?'900 15px system-ui':'900 9px system-ui';ctx.textAlign='center';ctx.fillText('●',fx,y0+top+9)}
@@ -1725,8 +1725,385 @@ startFocus=function(type,rival=null){
 const _v59CloseFocus=closeFocus;
 closeFocus=function(){V59Mobile.leaveFocus();return _v59CloseFocus()};
 window.addEventListener('resize',()=>{if(!V59Mobile.isMobile())V59Mobile.leaveFocus()},{passive:true});
-window.__ALUA_V59={version:'60',mobile:()=>({w:innerWidth,h:innerHeight,focus:document.body.classList.contains('v59Focus')})};
+window.__ALUA_V59={version:'61',mobile:()=>({w:innerWidth,h:innerHeight,focus:document.body.classList.contains('v59Focus')})};
+
+
+// =============================
+// V63 · FULL BALANCE AUDIT
+// One physiology ledger, meaningful hydration/fuel, progression that matters.
+// =============================
+console.info('ALUA Simulator V63 · full balance audit');
+
+// Nutrition upgrades now improve absorption/tolerance enough to be felt, without changing the nominal serving size drastically.
+LevelEngine.foodEffect=function(kind){
+  this.ensure();
+  const lv=Math.max(1,career.foodLevels?.[kind]||1), log=Math.log2(lv);
+  const scale=kind==='drink'?.050:kind==='gel'?.042:.036;
+  return clamp(1+log*scale,1,kind==='drink'?1.34:1.28);
+};
+
+// Use ONLY the original physiological ledger for glycogen / sweat / fluid loss.
+// V53/V55 had stacked extra drains on top of the base model; those are intentionally bypassed here.
+updatePhys=function(dt){
+  _v53UpdatePhys(dt);
+
+  const rel=(P.power||0)/Math.max(1,cfg.cp), wheel=(P.follow&&P.followTarget)?clamp(wheelQuality||0,0,1):0;
+  const hyd=clamp(P.fluidDef/.018,0,1.5), fuel=clamp((195-P.gly)/135,0,1.2);
+
+  // Fatigue remains a game resource, but is not charged twice through food/water.
+  let extraFat=0;
+  if(rel>.92)extraFat += dt*(rel-.92)*(.00018+.00012*hyd+.00008*fuel);
+  let recover=0;
+  if(rel<.76&&!P.attack&&!P.sprint)recover += dt*.00028;
+  if(rel<.64&&!P.attack&&!P.sprint)recover += dt*.00030;
+  if(wheel>.58&&rel<.82)recover += dt*.00034*wheel;
+  if(wheel>.82&&rel<.72)recover += dt*.00042*wheel;
+  P.fat=clamp(P.fat+extraFat-recover,0,1);
+
+  // Slightly faster gastric water transfer for the compressed ~30 min simulated race.
+  // Upgraded drink improves absorption rather than magically increasing the bottle volume.
+  if((P.waterGutMl||0)>0){
+    const q=LevelEngine.foodEffect('drink'), extraRate=150+210*(q-1); // ml/h extra on top of base model
+    const extraAbs=Math.min(P.waterGutMl,extraRate*dt/3600);
+    P.waterGutMl=Math.max(0,P.waterGutMl-extraAbs);
+    P.waterAbsorbedMl=(P.waterAbsorbedMl||0)+extraAbs;
+    P.fluidDef=Math.max(0,P.fluidDef-extraAbs/(cfg.mass*1000));
+  }
+};
+
+// A sip has a small fast-availability fraction; the rest still waits in the gut and absorbs progressively.
+const _v63Drink=drink;
+drink=function(mode='normal'){
+  const gut0=P.waterGutMl||0,def0=P.fluidDef;
+  const ok=_v63Drink(mode);
+  if(!ok)return false;
+  const q=LevelEngine.foodEffect('drink');
+  const rapid=Math.min(P.waterGutMl||0,32+18*(q-1)); // ~32–38 ml available quickly
+  P.waterGutMl=Math.max(0,(P.waterGutMl||0)-rapid);
+  P.waterAbsorbedMl=(P.waterAbsorbedMl||0)+rapid;
+  P.fluidDef=Math.max(0,P.fluidDef-rapid/(cfg.mass*1000));
+  if($('msg'))$('msg').textContent=`💧 150 ml: ${Math.round(rapid)} ml disponibles rápido + ${Math.round((P.waterGutMl||0)-gut0)} ml en absorción. Déficit ${(def0*100).toFixed(1)}% → ${(P.fluidDef*100).toFixed(1)}%.`;
+  return true;
+};
+
+// Decisions should mostly cost what their requested power costs. Keep only modest instantaneous W′/fatigue fingerprints.
+const _v63ApplyCore=V48DecisionDirector.apply.bind(V48DecisionDirector);
+V48DecisionDirector.apply=function(a,auto=false){
+  if(!a)return;
+  const gly0=P.gly,def0=P.fluidDef,wp0=P.wp,fat0=P.fat;
+  const q=_v63ApplyCore(a,auto);
+  const c=a.code;
+
+  // Undo V55's direct glycogen / hydration tax. Metabolic cost is already created by the actual watts that follow.
+  P.gly=Math.max(P.gly,gly0);
+  P.fluidDef=Math.min(P.fluidDef,def0);
+
+  // Normalize the immediate tactical fingerprint (actual ongoing power continues to change these naturally).
+  const hard=['attack','counter','bridge','push','relayHard','sprintLaunch','sprintRemate','sprintAll','bottleCenter'];
+  const medium=['chase','relayShort','position'];
+  const recover=['conserve','shelter','wheel','mark','drinkWheel','bottleWheel','bottleYield'];
+  if(hard.includes(c)){
+    P.wp=clamp(Math.min(P.wp,wp0)-cfg.wp*.010,0,cfg.wp);
+    P.fat=clamp(Math.max(P.fat,fat0)+.0055,0,1);
+  } else if(medium.includes(c)){
+    P.wp=clamp(Math.min(P.wp,wp0)-cfg.wp*.004,0,cfg.wp);
+    P.fat=clamp(Math.max(P.fat,fat0)+.0025,0,1);
+  } else if(recover.includes(c)){
+    P.wp=clamp(Math.max(P.wp,wp0)+cfg.wp*.006,0,cfg.wp);
+    P.fat=clamp(Math.min(P.fat,fat0)-.004,0,1);
+  }
+  return q;
+};
+
+// Player progression must create a real advantage. Rivals no longer copy 100% of the player's CP/W′ gains.
+const _v63ResetRivals=resetRivals;
+resetRivals=function(){
+  _v63ResetRivals();
+  const playerLv=Math.max(1,LevelEngine.ensure().level);
+  const cpGap=clamp(5+Math.max(0,career.cp-285)*.22+Math.log2(playerLv)*1.1,5,28);
+  const fieldCP=Math.max(220,career.cp-cpGap);
+  const wpGap=clamp(.035+Math.max(0,career.wp-19000)/125000,.035,.11);
+  rivals.forEach((r,i)=>{
+    const oldRel=clamp(r.cp/Math.max(1,career.cp),.94,1.07);
+    const levelRel=clamp(Math.pow((r.level||playerLv)/playerLv,.055),.975,1.025);
+    const key=keyRivalNames.includes(r.name)?1.012:1;
+    r.cp=fieldCP*oldRel*levelRel*key;
+    const roleWp=r.role==='attacker'?1.045:r.role==='sprinter'?1.015:1;
+    r.wpMax=career.wp*(1-wpGap)*rnd(.93,1.07)*roleWp;
+    r.wp=r.wpMax;
+    r.power=clamp(r.power, r.cp*.70, r.cp*.92);
+    if(stageType==='CRI')r.ttPace=r.cp*rnd(.92,1.025);
+  });
+};
+
+// HUD uses actual stores, plus pending intake as a clearly visible 'on the way' buffer.
+const _v63HudSync=V50HUD.sync.bind(V50HUD);
+V50HUD.sync=function(){
+  _v63HudSync();
+  const pendingCarb=Math.min(42,(P.gut||0)*.60), effectiveGly=Math.min(cfg.gly,P.gly+pendingCarb);
+  const energy=clamp((effectiveGly-145)/Math.max(1,cfg.gly-145)*100,0,100);
+  const pendingWater=Math.min(.0035,(P.waterGutMl||0)/(cfg.mass*1000)*.58), effectiveDef=Math.max(0,P.fluidDef-pendingWater),defPct=effectiveDef*100;
+  const water=clamp(100-defPct/1.65*100,0,100);
+  if($('v46GlyBar'))$('v46GlyBar').style.width=energy+'%';
+  if($('v46HydBar'))$('v46HydBar').style.width=water+'%';
+  if($('v49EnergyState'))$('v49EnergyState').textContent=(P.gut||0)>8?'ABSORBIENDO':energy<22?'VACÍO':energy<45?'BAJO':energy<70?'GASTANDO':'OK';
+  if($('v49WaterState'))$('v49WaterState').textContent=(P.waterGutMl||0)>18?'ABSORBIENDO':defPct<.30?'OK':defPct<.75?'BEBE':defPct<1.25?'DÉFICIT':'CRÍTICO';
+  V54Motor.sync();
+};
+
+
+// =============================
+// V64 · DECISION IMPACT + COMPETITIVE BALANCE
+// Decisions persist for seconds, not one tick. Intent-level variety, stronger wheel/attack,
+// faster visible fuel/hydration depletion, softer fatigue, slightly stronger player.
+// =============================
+console.info('ALUA Simulator V64 · decision impact + competitive balance');
+
+const V64Intent={
+  of(a){
+    const c=typeof a==='string'?a:(a?.code||'');
+    if(['conserve'].includes(c))return 'RECOVER';
+    if(['shelter'].includes(c))return 'SUPER_WHEEL';
+    if(['wheel','mark'].includes(c))return 'WHEEL';
+    if(['drinkWheel'].includes(c))return 'HYDRATE_WHEEL';
+    if(['drink'].includes(c))return 'HYDRATE';
+    if(['gel'].includes(c))return 'FUEL';
+    if(['attack','counter'].includes(c))return 'ATTACK';
+    if(['bridge'].includes(c))return 'BRIDGE';
+    if(['push'].includes(c))return 'PRESS';
+    if(['chase'].includes(c))return 'CHASE';
+    if(['position'].includes(c))return 'POSITION';
+    if(['relayShort','relayHard'].includes(c))return 'RELAY';
+    if(['skipRelay'].includes(c))return 'SKIP_RELAY';
+    if(['hold','ignore'].includes(c))return 'HOLD';
+    if(['descSafe','descFlow','descRisk'].includes(c))return 'DESCENT_'+c;
+    if(['sprintLaunch','sprintRemate','sprintHold','sprintAll'].includes(c))return 'SPRINT_'+c;
+    if(c==='aero')return 'AERO';
+    return c||'OTHER';
+  },
+  label(a){return (a?.label||'').trim().toUpperCase().replace(/\s+/g,' ')}
+};
+
+const V64Commitment={
+  active:null,
+  start(kind,seconds,data={}){this.active={kind,t:seconds,total:seconds,age:0,...data};},
+  clear(){this.active=null},
+  tick(dt){if(!this.active)return;this.active.age+=dt;this.active.t-=dt;if(this.active.t<=0)this.clear()},
+  wheel(seconds=6.5,superWheel=false){
+    if(!P.followTarget)chooseWheel();
+    if(P.followTarget)this.start(superWheel?'superWheel':'wheel',seconds,{target:P.followTarget,ideal:raceEvent.type==='crosswind'?4.0:5.2});
+  },
+  attack(seconds=4.2){if(P.attack)this.start('attack',seconds,{launchLock:1.25});}
+};
+
+// Intent-level decision memory: no duplicated "RELAX", wheel, attack, etc. in the same offer,
+// and strongly avoid intentions shown/chosen in the last two decision windows.
+const _v64BaseOptions=V50DecisionFlow.options.bind(V50DecisionFlow);
+V50DecisionFlow.options=function(type,s=V48RaceState.snapshot()){
+  V48DecisionDirector.build();
+  let ctx=s.state,pool=V48DecisionDirector.catalog.filter(a=>a.ctx===ctx);
+  if(!pool.length)pool=V48DecisionDirector.catalog.filter(a=>a.ctx==='PELOTON');
+  let candidates=pool.filter(a=>this.valid(a,s)).map(a=>({...a,fit:this.suitability(a,s)})).filter(a=>a.fit>=.20);
+  // Dedupe identical labels and tactical intentions before ranking.
+  const unique=new Map();
+  for(const a of candidates){
+    const k=V64Intent.of(a)+'|'+V64Intent.label(a);
+    const old=unique.get(k); if(!old||a.fit>old.fit)unique.set(k,a);
+  }
+  candidates=[...unique.values()];
+  const recentOfferIntents=new Set(this.offerHistory.slice(-2).flatMap(x=>x.intents||[]));
+  const recentChosenIntents=new Set((this.selectedIntents||[]).slice(-2));
+  const lastIntent=this.selectedIntents?.at(-1)||'';
+  const scored=candidates.map(a=>{
+    let fit=a.fit,intent=V64Intent.of(a);
+    if(recentOfferIntents.has(intent))fit-=.18;
+    if(recentChosenIntents.has(intent))fit-=.24;
+    if(intent===lastIntent)fit-=.22;
+    // Situation-sensitive variety.
+    if(intent==='RECOVER'&&(P.fat||0)>.30)fit+=.13;
+    if(intent==='SUPER_WHEEL'&&(P.fat||0)>.22)fit+=.12;
+    if(intent==='HYDRATE'&&P.fluidDef>.005)fit+=.12;
+    if(intent==='FUEL'&&P.gly<235)fit+=.11;
+    if(intent==='ATTACK'&&P.wp/cfg.wp>.42&&(P.fat||0)<.55)fit+=.08;
+    return {...a,fit};
+  }).sort((a,b)=>b.fit-a.fit);
+  const byIntent=new Map();
+  for(const a of scored){let i=V64Intent.of(a);if(!byIntent.has(i))byIntent.set(i,a)}
+  let fresh=[...byIntent.values()].filter(a=>!recentOfferIntents.has(V64Intent.of(a))&&!recentChosenIntents.has(V64Intent.of(a)));
+  let fallback=[...byIntent.values()].filter(a=>!fresh.some(f=>f.id===a.id));
+  const out=[];
+  const pickFrom=arr=>{
+    while(arr.length&&out.length<3){
+      const top=arr.slice(0,Math.min(4,arr.length));
+      const ix=Math.floor(Math.random()*top.length),a=top[ix];
+      arr.splice(arr.indexOf(a),1);
+      if(!out.some(x=>V64Intent.of(x)===V64Intent.of(a))&&!out.some(x=>V64Intent.label(x)===V64Intent.label(a)))out.push(a);
+    }
+  };
+  pickFrom(fresh);pickFrom(fallback);
+  // Never open an auto decision window with a single fake choice.
+  if(out.length<2)return [];
+  return out.slice(0,3).sort(()=>Math.random()-.5);
+};
+const _v64RecordOffer=V50DecisionFlow.recordOffer.bind(V50DecisionFlow);
+V50DecisionFlow.recordOffer=function(s,opts){
+  _v64RecordOffer(s,opts);
+  const e=this.offerHistory.at(-1);if(e)e.intents=opts.map(V64Intent.of);
+};
+const _v64RecordChoice=V50DecisionFlow.recordChoice.bind(V50DecisionFlow);
+V50DecisionFlow.recordChoice=function(a){
+  _v64RecordChoice(a);
+  this.selectedIntents=this.selectedIntents||[];
+  this.selectedIntents.push(V64Intent.of(a));this.selectedIntents=this.selectedIntents.slice(-10);
+  this.blockUntil=Math.max(this.blockUntil,performance.now()+6200);
+};
+
+// Keep wheel for several seconds. We request the power needed to hold a realistic 4–6 m gap;
+// no teleporting, but small rival speed changes no longer instantly break the action.
+const _v64ChooseWheel=chooseWheel;
+chooseWheel=function(){
+  _v64ChooseWheel();
+  if(P.follow&&P.followTarget)V64Commitment.start('wheel',6.5,{target:P.followTarget,ideal:raceEvent.type==='crosswind'?4.0:5.2});
+};
+
+// Attack has an actual launch phase: more committed power and a short response delay for the AI.
+const _v64SmartAttack=smartAttack;
+smartAttack=function(){
+  const wp0=P.wp;
+  _v64SmartAttack();
+  if(P.attack){
+    P.attack.power=Math.min(V48Bio.curve(Math.max(1,V48Bio.s?.effortT||1))*1.04,(P.attack.power||cfg.cp+90)*1.07+12);
+    P.basePower=Math.max(P.basePower,Math.min(P.attack.power,cfg.cp+135));
+    P.wp=clamp(P.wp-cfg.wp*.006,0,cfg.wp);
+    V64Commitment.start('attack',4.2,{launchLock:1.25,wp0});
+    V48MessageDirector.toast('ATAQUE · latigazo real, la respuesta llega después','good');
+  }
+};
+
+// Decision application activates persistent physical commitments, rather than a one-frame instruction.
+const _v64DecisionApply=V48DecisionDirector.apply.bind(V48DecisionDirector);
+V48DecisionDirector.apply=function(a,auto=false){
+  if(!a)return;
+  const q=_v64DecisionApply(a,auto),c=a.code;
+  if(['wheel','mark'].includes(c))V64Commitment.wheel(6.8,false);
+  if(c==='shelter')V64Commitment.wheel(8.2,true);
+  if(c==='drinkWheel')V64Commitment.wheel(6.5,true);
+  if(['attack','counter'].includes(c))V64Commitment.attack(4.4);
+  if(c==='bridge')V64Commitment.start('bridge',5.2,{target:V48RaceState.snapshot().threat});
+  if(c==='conserve')V64Commitment.start('recover',7.0,{});
+  if(c==='push')V64Commitment.start('press',5.0,{});
+  return q;
+};
+
+// Apply commitment before the normal player controller so the normal loop follows the decision.
+const _v64UpdatePlayer=updatePlayer;
+updatePlayer=function(dt){
+  const e=V64Commitment.active;
+  if(e){
+    if((e.kind==='wheel'||e.kind==='superWheel')&&e.target){
+      const gap=(e.target.km-P.km)*1000,ideal=e.ideal||5.2;
+      if(gap>-3&&gap<68){
+        P.follow=true;P.followTarget=e.target;P.targetLane=lerp(P.targetLane,e.target.lane,.32);
+        const cap=V48Bio.s?.lastCap||career.p5s||9999;
+        const q=e.kind==='superWheel'?.72:.78;
+        const need=(e.target.power||cfg.cp*.82)*q+(gap-ideal)*3.6;
+        P.basePower=clamp(Math.max(P.basePower,need),100,Math.min(560,cap*1.02));
+      }else if(gap>=68){V64Commitment.clear()}
+    }else if(e.kind==='attack'&&P.attack){
+      P.basePower=Math.max(P.basePower,Math.min(P.attack.power||cfg.cp+105,cfg.cp+145));
+    }else if(e.kind==='bridge'){
+      P.basePower=Math.max(P.basePower,cfg.cp+58);
+    }else if(e.kind==='recover'){
+      P.basePower=Math.min(P.basePower,cfg.cp*.61);
+      if(!P.attack&&!P.sprint){P.fat=clamp(P.fat-dt*.00065,0,1)}
+    }else if(e.kind==='press'){
+      P.basePower=Math.max(P.basePower,cfg.cp+38);
+    }
+  }
+  _v64UpdatePlayer(dt);
+  // Re-attach a wheel after the base controller if it dropped it for a harmless transient gap.
+  const a=V64Commitment.active;
+  if(a&&(a.kind==='wheel'||a.kind==='superWheel')&&a.target){
+    const gap=(a.target.km-P.km)*1000;
+    if(gap>0&&gap<62){P.follow=true;P.followTarget=a.target;wheelQuality=Math.max(wheelQuality,a.kind==='superWheel'?.82:.68)}
+  }
+  V64Commitment.tick(dt);
+};
+
+// During the first attack second rivals cannot all react instantly just because P.attack became true.
+const _v64UpdateAI=updateAI;
+updateAI=function(dt){
+  const e=V64Commitment.active,hideAttack=e?.kind==='attack'&&e.age<(e.launchLock||1.25)&&P.attack;
+  let attackRef=null;
+  if(hideAttack){attackRef=P.attack;P.attack=null}
+  _v64UpdateAI(dt);
+  if(hideAttack&&attackRef)P.attack=attackRef;
+};
+
+// Scale the ONE physiological ledger rather than charging a second arbitrary tax.
+// More visible fuel/water depletion, but less fatigue accumulation.
+const _v64Phys=updatePhys;
+updatePhys=function(dt){
+  const g0=P.gly,d0=P.fluidDef,f0=P.fat;
+  _v64Phys(dt);
+  if(P.gly<g0){const loss=g0-P.gly;P.gly=clamp(g0-loss*1.22,0,cfg.gly)}
+  if(P.fluidDef>d0){const loss=P.fluidDef-d0;P.fluidDef=clamp(d0+loss*1.24,0,.08)}
+  if(P.fat>f0){const gain=P.fat-f0;P.fat=clamp(f0+gain*.62,0,1)}
+};
+
+// Give the player a modest but real competitive edge as progression rises.
+const _v64ResetRivals=resetRivals;
+resetRivals=function(){
+  _v64ResetRivals();
+  const lv=Math.max(1,LevelEngine.ensure().level),prog=clamp(Math.log2(lv+1)*.004,0,.018);
+  rivals.forEach(r=>{
+    const key=keyRivalNames.includes(r.name);
+    r.cp*=key?(0.992-prog*.25):(0.978-prog);
+    r.wpMax*=key?.985:.965;r.wp=Math.min(r.wp,r.wpMax);
+    if(stageType==='CRI')r.ttPace=r.cp*rnd(.93,1.015);
+  });
+};
+
+// Stronger immediate feedback: show what the selected decision is doing now.
+const _v64SafeResolve=safeResolveFocus;
+safeResolveFocus=function(choice,auto=false){
+  const c=window.__focusCtx,a=c?.v48Options?.find(x=>x.id===choice);
+  const wp0=P.wp,f0=P.fat,pos0=P.pos,p0=P.power;
+  const r=_v64SafeResolve(choice,auto);
+  if(a){
+    setTimeout(()=>{
+      const e=V64Commitment.active,parts=[];
+      if(e)parts.push(e.kind==='wheel'||e.kind==='superWheel'?`enganche ${Math.ceil(e.t)} s`:e.kind==='attack'?`ataque ${Math.ceil(e.t)} s`:e.kind==='recover'?`recuperación ${Math.ceil(e.t)} s`:`efecto ${Math.ceil(e.t)} s`);
+      const dw=Math.round((P.wp-wp0)/Math.max(1,cfg.wp)*100),df=Math.round((P.fat-f0)*100);
+      if(dw)parts.push(`W′ ${dw>0?'+':''}${dw}%`);if(df)parts.push(`fatiga ${df>0?'+':''}${df}%`);
+      V48MessageDirector.toast(`${a.label}${parts.length?' · '+parts.join(' · '):''}`,'good');
+    },720)
+  }
+  return r;
+};
+
+// Reset new decision memory/commitments reliably.
+const _v64Reset=reset;
+reset=function(go=false){
+  V64Commitment.clear();
+  if(V50DecisionFlow) V50DecisionFlow.selectedIntents=[];
+  return _v64Reset(go);
+};
+
+window.__ALUA_V64={
+  version:'64-decision-impact',
+  commitment:()=>V64Commitment.active?{...V64Commitment.active,target:V64Commitment.active.target?.name||null}:null,
+  recentDecisionIntents:()=>({offers:V50DecisionFlow.offerHistory.slice(-3).map(x=>x.intents||[]),chosen:(V50DecisionFlow.selectedIntents||[]).slice(-5)}),
+  player:()=>({power:Math.round(P.power),requested:Math.round(P.basePower),speed:+(P.speed*3.6).toFixed(1),wp:+(P.wp/cfg.wp*100).toFixed(1),fat:+((P.fat||0)*100).toFixed(1),gly:+P.gly.toFixed(1),hyd:+(P.fluidDef*100).toFixed(2)})
+};
+
+window.__ALUA_V63={
+  version:'63-balance',
+  player:()=>({cp:career.cp,requested:P.basePower,actual:P.power,speedKmh:+(P.speed*3.6).toFixed(1),wpPct:+(P.wp/cfg.wp*100).toFixed(1),fatiguePct:+((P.fat||0)*100).toFixed(1),gly:+P.gly.toFixed(1),fluidDefPct:+(P.fluidDef*100).toFixed(2),gutCarb:+(P.gut||0).toFixed(1),gutWater:Math.round(P.waterGutMl||0)}),
+  field:()=>rivals.map(r=>({name:r.name,cp:Math.round(r.cp),wp:Math.round(r.wpMax),level:r.level})).sort((a,b)=>b.cp-a.cp)
+};
 
 })();
 
-window.__ALUA_V60=window.__ALUA_V59;
+window.__ALUA_V61=window.__ALUA_V59;
+window.__ALUA_LATEST=window.__ALUA_V64;

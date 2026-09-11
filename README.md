@@ -1,3 +1,3 @@
-# ALUA Simulator V60 — Mobile Fine Tune
+# ALUA Simulator V64 — Decision Impact
 
-Ajuste fino móvil: margen seguro lateral, menú de decisiones con fondo transparente y botones opacos, contador reducido al número de cuenta atrás.
+Revisión integral del sistema de decisiones: variedad por intención táctica, efectos persistentes de rueda/ataque/recuperación, balance competitivo, hidratación/energía más visibles y fatiga más contenida.
