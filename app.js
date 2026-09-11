@@ -100,7 +100,7 @@ const LevelEngine={
  foodXP(kind){return Math.max(6,Math.round(7+Math.sqrt(this.foodUpgradeCost(kind))*.45))}
 };LevelEngine.ensure();
 const RankingEngine={fieldRating(){return 1160+(career.pelotonLevel-1)*1100+Math.min(260,career.races*8)+({LLANA:0,QUEBRADA:25,'MEDIA MONTAÑA':45,MONTAÑA:70,CRI:55}[stageType]||0)},rankFromRating(r){return Math.max(1,Math.round(5200*Math.exp(-(r-850)/520)))},record(pos,dnf=false){RiderEngine.ensure();let old=career.ranking.global,field=this.fieldRating(),n=Math.max(2,rivals.length+1),place=dnf?n:Math.max(1,Number(pos)||n),actual=1-(place-1)/(n-1),expected=1/(1+Math.pow(10,(field-career.ranking.rating)/380)),k=44+Math.min(24,career.races*.6),delta=Math.round(k*(actual-expected));if(dnf)delta=Math.min(delta,-18);career.ranking.rating=clamp(career.ranking.rating+delta,800,2200);career.ranking.global=this.rankFromRating(career.ranking.rating);career.ranking.lastDelta=old-career.ranking.global;let pts=Math.max(0,Math.round((n+5-place)*racePrestige()*3));career.ranking.points+=pts;career.ranking.reputation=clamp(career.ranking.reputation+Math.max(0,Math.round(delta*.4))+(place<=10?2:0),0,9999);let spec=stageType==='CRI'?'tt':(['MONTAÑA','MEDIA MONTAÑA'].includes(stageType)?'climb':(place<=6&&career.skills.sprint>career.skills.flat?'sprint':null));if(spec){let rr=career.ranking[spec]||career.ranking.global+200;career.ranking[spec]=Math.max(1,rr-Math.round(Math.max(-25,delta)*1.3)-Math.max(0,12-place))}career.ranking.season=Math.max(1,Math.round(career.ranking.global*.9-career.ranking.points*.18));let rec={week:career.week,race:career.races,stage:stageType,pos:dnf?'DNF':place,delta:0,rank:career.ranking.global,rating:Math.round(career.ranking.rating),level:LevelEngine.ensure().level};career.statusHistory.unshift(rec);career.statusHistory=career.statusHistory.slice(0,20);return rec},tier(){return LevelEngine.category()}};
-const TrainingEngine={families:{endurance:{baseLoad:48,skills:{endurance:.62,flat:.22,recovery:.10},roots:['Motor Largo','Fondo de Acero','Reserva Profunda','Kilómetros de Calidad','Base Sierra','Diesel Córdoba'],protocols:['Z2 progresivo','tempo final','cadencia estable','fondo quebrado','resistencia a fatiga']},threshold:{baseLoad:64,skills:{flat:.25,endurance:.22,tt:.20,climb:.18},roots:['Umbral de Piedra','CP Sostenida','Bloque Rojo','Paso Constante','Motor de Puerto','Límite Controlado'],protocols:['3×12','2×20','over-under','4×8','sweet spot + CP']},vo2:{baseLoad:74,skills:{climb:.28,tt:.15,endurance:.17},roots:['Techo Sierra','Oxígeno Alto','Cota Máxima','Pulmón de Acero','Motor 5 Min','Ataque al Techo'],protocols:['5×3','6×2','4×4','30/30','microbursts']},anaerobic:{baseLoad:77,skills:{sprint:.42,tactics:.08,climb:.10},roots:['Chispa Final','Ataque Seco','Último Kilómetro','W Prima','Martillo Corto','Explosión de Grupo'],protocols:['sprints 10 s','1 min repeats','40/20','salidas lentas','sprint lanzado']},mixed:{baseLoad:68,skills:{tactics:.30,endurance:.18,flat:.12,sprint:.10,climb:.10},roots:['Carrera Invisible','Lectura de Grupo','Cambios de Guion','Caos Controlado','Rueda Maestra','Semana de Competición'],protocols:['fartlek táctico','relevos + ataques','simulación final','cambios 20/40','grupo reducido']},technique:{baseLoad:38,skills:{descend:.52,tactics:.22},roots:['Línea Perfecta','Curva Ciega','Descenso Sierra','Frenada Tardía','Trazada Limpia','Bajada de Confianza'],protocols:['curvas enlazadas','frenada + salida','descenso técnico','línea mojada','velocidad progresiva']},recovery:{baseLoad:18,skills:{recovery:.48,endurance:.08},roots:['Semana Esponja','Absorber','Reset de Piernas','Silencio Metabólico','Reconstrucción','Volver a Tener Hambre'],protocols:['Z1 + movilidad','descanso activo','Z2 corto','sueño + movilidad','rodaje regenerativo']},climbing:{baseLoad:71,skills:{climb:.48,endurance:.18},roots:['Cabra Montés','Vertical','Puerto Encadenado','Rampas de Assuan','Gravedad Cero','Escalada Sostenida'],protocols:['repeticiones 8%','tempo en puerto','over-under subida','cadencia baja','final en rampa']},tt:{baseLoad:66,skills:{tt:.45,flat:.25,endurance:.12},roots:['Reloj Roto','Aero Motor','Pacing Perfecto','Línea de Crono','Contra el Viento','Umbral Aero'],protocols:['20 min aero','negative split','bloques CP','pacing 95-105%','cadencia aero']}},hash(x){let h=2166136261;for(let c of String(x)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0},pick(a,k){return a[this.hash(k)%a.length]},generate(){RiderEngine.ensure();let keys=['endurance','threshold','vo2','anaerobic','mixed','technique','recovery'];if(career.skills.climb<64||['MONTAÑA','MEDIA MONTAÑA'].includes(stageType))keys.push('climbing');if(career.skills.tt<66||stageType==='CRI')keys.push('tt');let arr=keys.map(fam=>{let f=this.families[fam],seed=`${career.week}-${career.races}-${fam}-${career.trainingSeed||1}`,root=this.pick(f.roots,seed),prot=this.pick(f.protocols,seed+'p'),suffix=this.pick(['I','II','A','B','PRO','Sierra','Race'],seed+'s'),load=Math.round(f.baseLoad*(.94+(this.hash(seed+'l')%13)/100));return{id:`${fam}-${career.week}-${this.hash(seed)%9999}`,family:fam,title:`${root} ${suffix}`,subtitle:prot,load,skills:f.skills}});career.generatedPrograms=arr;return arr},render(){let arr=this.generate(),rec=coachRecommendation(),box=$('trainingPrograms');if(!box)return;box.innerHTML=arr.map(p=>`<button data-plan="${p.family}" data-program="${p.id}" class="${career.selectedProgram?.id===p.id?'selected':''} ${rec.p===p.family?'recommended':''}"><b>${p.title}<em class="progLoad">${p.load}</em></b><span>${p.subtitle}</span><div class="programMeta">${Object.keys(p.skills).slice(0,3).map(k=>`<i>${({climb:'SUBIDA',flat:'LLANO',descend:'BAJADA',tt:'CRI',sprint:'SPRINT',endurance:'FONDO',recovery:'REC',tactics:'TÁCTICA'}[k]||k)}</i>`).join('')}</div></button>`).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>selectPlan(b.dataset.plan,b.dataset.program))},selected(){let a=career.generatedPrograms||this.generate();return a.find(p=>p.id===career.selectedProgram?.id)||a.find(p=>p.family===career.plan)||null},applySkills(gain){let p=this.selected();if(!p)return{};let out={};for(const[k,w]of Object.entries(p.skills))out[k]=RiderEngine.adaptSkill(k,gain*w*1.25);return out},sessions(p=this.selected()){if(!p)return[];let key=p.family,hard=['vo2','anaerobic','climbing'].includes(key),terrain=key==='technique'?'DESCENSO':key==='climbing'?'PUERTO':key==='tt'?'AERO':'Z2';return[['L','🌿','RECUPERACIÓN','easy'],['M',hard?'🔥':'⚙️',p.subtitle,'hard key'],['X','🚴',terrain,''],['J','🎯',this.pick(['CONTROL TÉCNICO','TEMPO','ECONOMÍA','CADENCIA'],p.id+'j'),key==='recovery'?'easy':'key'],['V','🌿','DESCARGA','easy'],['S',hard?'⚡':'🚴',p.title,'hard key'],['D','🌿',key==='recovery'?'OFF':'RODAJE SUAVE','easy']]}};
+const TrainingEngine={families:{endurance:{baseLoad:48,skills:{endurance:.62,flat:.22,recovery:.10},roots:['Motor Largo','Fondo de Acero','Reserva Profunda','Kilómetros de Calidad','Base Sierra','Diesel Córdoba'],protocols:['Z2 progresivo','tempo final','cadencia estable','fondo quebrado','resistencia a fatiga']},threshold:{baseLoad:64,skills:{flat:.25,endurance:.22,tt:.20,climb:.18},roots:['Umbral de Piedra','CP Sostenida','Bloque Rojo','Paso Constante','Motor de Puerto','Límite Controlado'],protocols:['3×12','2×20','over-under','4×8','sweet spot + CP']},vo2:{baseLoad:74,skills:{climb:.28,tt:.15,endurance:.17},roots:['Techo Sierra','Oxígeno Alto','Cota Máxima','Pulmón de Acero','Motor 5 Min','Ataque al Techo'],protocols:['5×3','6×2','4×4','30/30','microbursts']},anaerobic:{baseLoad:77,skills:{sprint:.42,tactics:.08,climb:.10},roots:['Chispa Final','Ataque Seco','Último Kilómetro','W Prima','Martillo Corto','Explosión de Grupo'],protocols:['sprints 10 s','1 min repeats','40/20','salidas lentas','sprint lanzado']},mixed:{baseLoad:68,skills:{tactics:.30,endurance:.18,flat:.12,sprint:.10,climb:.10},roots:['Carrera Invisible','Lectura de Grupo','Cambios de Guion','Caos Controlado','Rueda Maestra','Semana de Competición'],protocols:['fartlek táctico','relevos + ataques','simulación final','cambios 20/40','grupo reducido']},technique:{baseLoad:38,skills:{descend:.52,tactics:.22},roots:['Línea Perfecta','Curva Ciega','Descenso Sierra','Frenada Tardía','Trazada Limpia','Bajada de Confianza'],protocols:['curvas enlazadas','frenada + salida','descenso técnico','línea mojada','velocidad progresiva']},recovery:{baseLoad:18,skills:{recovery:.48,endurance:.08},roots:['Semana Esponja','Absorber','Reset de Piernas','Silencio Metabólico','Reconstrucción','Volver a Tener Hambre'],protocols:['Z1 + movilidad','descanso activo','Z2 corto','sueño + movilidad','rodaje regenerativo']},climbing:{baseLoad:71,skills:{climb:.48,endurance:.18},roots:['Cabra Montés','Vertical','Puerto Encadenado','Rampas de Assuan','Gravedad Cero','Escalada Sostenida'],protocols:['repeticiones 8%','tempo en puerto','over-under subida','cadencia baja','final en rampa']},tt:{baseLoad:66,skills:{tt:.45,flat:.25,endurance:.12},roots:['Reloj Roto','Aero Motor','Pacing Perfecto','Línea de Crono','Contra el Viento','Umbral Aero'],protocols:['20 min aero','negative split','bloques CP','pacing 95-105%','cadencia aero']}},hash(x){let h=2166136261;for(let c of String(x)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0},pick(a,k){return a[this.hash(k)%a.length]},generate(){RiderEngine.ensure();let keys=['endurance','threshold','vo2','anaerobic','mixed','technique','recovery'];if(career.skills.climb<64||['MONTAÑA','MEDIA MONTAÑA'].includes(stageType))keys.push('climbing');if(career.skills.tt<66||stageType==='CRI')keys.push('tt');let arr=keys.map(fam=>{let f=this.families[fam],seed=`${career.week}-${career.races}-${fam}-${career.trainingSeed||1}`,root=this.pick(f.roots,seed),prot=this.pick(f.protocols,seed+'p'),suffix=this.pick(['I','II','A','B','PRO','Sierra','Race'],seed+'s'),load=Math.round(f.baseLoad*(.94+(this.hash(seed+'l')%13)/100));return{id:`${fam}-${career.week}-${this.hash(seed)%9999}`,family:fam,title:`${root} ${suffix}`,subtitle:prot,load,skills:f.skills}});career.generatedPrograms=arr;return arr},render(){let arr=this.generate(),rec=coachRecommendation(),box=$('trainingPrograms');if(!box)return;box.innerHTML=arr.map(p=>`<button data-plan="${p.family}" data-program="${p.id}" class="${career.selectedProgram?.id===p.id?'selected':''} ${rec.p===p.family?'recommended':''}"><b>${p.title}<em class="progLoad">${p.load}</em></b><span>${p.subtitle}</span><div class="programMeta">${Object.keys(p.skills).slice(0,3).map(k=>`<i>${({climb:'SUBIDA',flat:'LLANO',descend:'BAJADA',tt:'CRI',sprint:'SPRINT',endurance:'FONDO',recovery:'REC',tactics:'TÁCTICA'}[k]||k)}</i>`).join('')}</div></button>`).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>selectPlan(b.dataset.plan,b.dataset.program))},selected(){let a=career.generatedPrograms||this.generate();return a.find(p=>p.id===career.selectedProgram?.id)||a.find(p=>p.family===career.plan)||null},applySkills(gain){let p=this.selected();if(!p)return{};let out={};for(const[k,w]of Object.entries(p.skills))out[k]=RiderEngine.adaptSkill(k,gain*w*1.55);return out},sessions(p=this.selected()){if(!p)return[];let key=p.family,hard=['vo2','anaerobic','climbing'].includes(key),terrain=key==='technique'?'DESCENSO':key==='climbing'?'PUERTO':key==='tt'?'AERO':'Z2';return[['L','🌿','RECUPERACIÓN','easy'],['M',hard?'🔥':'⚙️',p.subtitle,'hard key'],['X','🚴',terrain,''],['J','🎯',this.pick(['CONTROL TÉCNICO','TEMPO','ECONOMÍA','CADENCIA'],p.id+'j'),key==='recovery'?'easy':'key'],['V','🌿','DESCARGA','easy'],['S',hard?'⚡':'🚴',p.title,'hard key'],['D','🌿',key==='recovery'?'OFF':'RODAJE SUAVE','easy']]}};
 const CareerWorld={sync(){RiderEngine.ensure();career.descSkill=career.skills.descend/100},raceValue(){return Math.max(0,Math.round((career.ranking.rating-850)*15+career.ranking.reputation*35+career.money*.15))},best(){let a=(career.history||[]).filter(x=>Number.isFinite(Number(x.pos))).map(x=>Number(x.pos));return a.length?Math.min(...a)+'º':'—'}};CareerWorld.sync();
 
 const P={name:'TÚ',km:0,lane:0,targetLane:0,power:240,basePower:240,speed:10.8,hr:80,vo2:8,wp:21000,gly:430,glu:95,gut:0,fluidDef:0,core:37,sweatL:0,fat:0,performanceFactor:1,physCap:9999,anaerobicHealth:1,recoveryHealth:1,carbBoost:0,slowCarb:0,coolBoost:0,hrLoad:0,zoneTime:0,draftSaving:0,gels:3,bars:1,bottleMl:1000,waterGutMl:0,waterAbsorbedMl:0,drunkMl:0,attack:null,sprint:null,follow:false,followTarget:null,t:0,pos:18,cal:0,carbOx:0,pickups:new Set(),color:'#b3267a'};
@@ -821,15 +821,15 @@ function buildWeekPreview(plan){let days=TrainingEngine.sessions();$('weekBuilde
 function coachRecommendation(){let lr=career.lastRace||{fat:0,aer:0,anr:0,hydr:0,fuel:0},hyd=lr.hydr||0,rec=career.recoveryDebt||0,fresh=career.fresh||1;if(hyd>.78||lr.fat>88||fresh<.48||rec>105)return{p:'recovery',n:'ASIMILAR',why:'La carrera te ha dejado demasiado tocado. Entrenar duro ahora destruye adaptación.'};if(lr.anr>lr.aer+16&&fresh>.60)return{p:'endurance',n:'CONSOLIDAR',why:'Mucho estímulo anaeróbico en carrera: absorbe y construye base sin repetir el mismo castigo.'};if(lr.aer>72&&lr.anr<55&&fresh>.68)return{p:'vo2',n:'SUBIR TECHO',why:'Llegas con buena carga aeróbica y margen de frescura: es una ventana útil para elevar techo.'};if((career.skills.descend||50)<58&&(lr.descStress||0)>20&&fresh>.58)return{p:'technique',n:'TÉCNICA',why:'La bajada ha sido un limitante real: trabajar trazada tiene retorno directo.'};if((career.skills.climb||50)<60&&fresh>.65)return{p:'climbing',n:'ESCALADA',why:'Tu perfil deja margen claro en subida: W/kg y economía en puerto pueden crecer.'};if(stageType==='CRI'&&(career.skills.tt||50)<68&&fresh>.62)return{p:'tt',n:'CRI / PACING',why:'La CRI expone pacing y aero como margen de mejora.'};if(lr.anr>68&&fresh>.66)return{p:'threshold',n:'UMBRAL',why:'La carrera ya dio explosividad. Conviene convertirla en potencia sostenible.'};return{p:'mixed',n:'COMPETICIÓN',why:'Estado equilibrado: semana variada para mejorar lectura de cambios y tolerancia de carrera.'}}
 function selectPlan(plan,programId=null){if(!career.needsTraining)return;career.plan=plan;let list=career.generatedPrograms||TrainingEngine.generate(),p=programId?list.find(x=>x.id===programId):list.find(x=>x.family===plan);career.selectedProgram=p?{...p}:null;document.querySelectorAll('.workouts button').forEach(x=>x.classList.toggle('selected',x.dataset.program===career.selectedProgram?.id));buildWeekPreview(plan);updateWeekEconomy();let lr=career.lastRace||{fat:50,aer:50,anr:50,hydr:0},rec=coachRecommendation(),sp=TrainingEngine.selected(),focus=sp?Object.keys(sp.skills).map(k=>({climb:'subida',flat:'llano',descend:'bajada',tt:'CRI',sprint:'sprint',endurance:'resistencia',recovery:'recuperación',tactics:'táctica'}[k]||k)).join(', '):plan;let txt=`${sp?.title||plan}: ${sp?.subtitle||''}. Foco: ${focus}.`;if(lr.hydr>.65&&plan!=='recovery')txt+=' ⚠ Deshidratación post-carrera: penaliza carga alta.';if(lr.fat>78&&plan!=='recovery')txt+=' ⚠ Fatiga post-carrera alta.';if(rec.p!==plan)txt+=' El entrenador recomienda '+rec.n+'.';$('weekEffect').textContent=txt;$('adaptResult').classList.remove('show')}
 function completeWeek(){if(!career.plan||!career.needsTraining)return;let cost=weekCost();if(career.money<cost){$('weekEffect').textContent='No tienes presupuesto para esta semana.';return}career.money-=cost;let p=career.plan,lr=career.lastRace||{aer:50,anr:50,fat:50,hydr:0,fuel:0},ex=new Set(career.weekExtras||[]);let before={cp:career.cp,wp:career.wp,vo2:career.vo2,fresh:career.fresh,condition:career.condition};let debt=career.recoveryDebt||0,intensity=career.intensityPlan||'balanced',iLoad={safe:.82,balanced:1,push:1.18}[intensity],iGain={safe:.86,balanced:1,push:1.12}[intensity],nutBonus={basic:0,carb:.04,pro:.09}[career.nutritionPlan||'basic']+(career.equipment.nutrition?.04:0)+(ex.has('nutritionConsult')?.025:0),recBonus={home:0,physio:.07,camp:.15}[career.recoveryPlan||'home']+(ex.has('massage')?.035:0)+(ex.has('sleep')?.025:0),coachBonus=(career.equipment.coach?.06:0)+(ex.has('analysis')?.025:0),postHydPenalty=clamp((lr.hydr||0)*.22,0,.28),postFuelPenalty=clamp((lr.fuel||0)*.08,0,.11),baseReady=clamp(career.fresh*(1-debt/260)*(1-(career.chronicFatigue||0)/240)-postHydPenalty-postFuelPenalty+nutBonus+recBonus+coachBonus,.12,1.12);let planLoad=(TrainingEngine.selected()?.load||({endurance:48,threshold:64,vo2:74,anaerobic:77,mixed:68,technique:38,recovery:18,climbing:71,tt:66}[p]||60))*iLoad,recoveryGain=({endurance:42,threshold:34,vo2:29,anaerobic:26,mixed:31,technique:48,recovery:80,climbing:30,tt:34}[p]||34)+(career.recoveryPlan==='physio'?12:career.recoveryPlan==='camp'?25:0)+(ex.has('massage')?7:0)+(ex.has('sleep')?5:0);let overload=clamp((planLoad+career.chronicFatigue*.40+debt*.12-92)/68,0,.82),readiness=clamp(baseReady*(1-overload),.10,1.08),raceMatch=p==='endurance'?(.72+lr.aer/180):p==='anaerobic'?(.66+lr.anr/165):p==='vo2'?(.72+(lr.aer+lr.anr)/350):p==='threshold'?(.76+lr.aer/230+lr.anr/520):p==='mixed'?(.72+(lr.aer+lr.anr)/390):p==='technique'?(.92+clamp((career.lastRace?.descStress||0)/120,0,.15)):p==='climbing'?(.78+lr.aer/260+lr.anr/480):p==='tt'?(.82+lr.aer/300):.88;let gain=readiness*raceMatch*iGain;let prevA={...(career.adaptation||{})},famMap={endurance:'aerobic',threshold:'threshold',vo2:'aerobic',anaerobic:'anaerobic',mixed:'threshold',technique:'technical',recovery:'recovery',climbing:'aerobic',tt:'threshold'},channel=famMap[p]||'aerobic';let stimulus=clamp(planLoad/75*readiness*raceMatch,0,1.45),quality=clamp(readiness*(1-overload*.55),.15,1.10);career.adaptation[channel]=clamp((career.adaptation[channel]||0)*.62+stimulus*.78,0,2.2);career.adaptation.recovery=clamp((career.adaptation.recovery||0)*.72+(recoveryGain/80)*.45,0,2.0);let delayed=(prevA[channel]||0)*.22+(prevA.recovery||0)*.05;gain*=clamp(.82+quality*.18+delayed*.12,.72,1.18);
- if(p==='endurance'){career.cp*=1+.0033*gain;career.wp*=1+.0038*readiness;career.form+=.07}
- else if(p==='threshold'){career.cp*=1+.0060*gain;career.vo2*=1+.0024*gain;career.wp*=1+.0034*gain;career.form+=.11}
- else if(p==='vo2'){career.cp*=1+.0056*gain;career.vo2*=1+.0040*gain;career.wp*=1+.0020*readiness;career.form+=.14}
- else if(p==='anaerobic'){career.wp*=1+.0105*gain;career.p1m*=1+.0062*gain;career.p5s*=1+.0060*gain;career.form+=.11}
- else if(p==='mixed'){career.cp*=1+.0042*gain;career.wp*=1+.0070*gain;career.vo2*=1+.0028*gain;career.p1m*=1+.0026*gain;career.form+=.12}
- else if(p==='climbing'){career.cp*=1+.0050*gain;career.vo2*=1+.0030*gain;career.form+=.11}
- else if(p==='tt'){career.cp*=1+.0048*gain;career.p20m*=1+.0045*gain;career.form+=.10}
+ if(p==='endurance'){career.cp*=1+.0043*gain;career.wp*=1+.0050*readiness;career.form+=.07}
+ else if(p==='threshold'){career.cp*=1+.0076*gain;career.vo2*=1+.0032*gain;career.wp*=1+.0043*gain;career.form+=.11}
+ else if(p==='vo2'){career.cp*=1+.0069*gain;career.vo2*=1+.0052*gain;career.wp*=1+.0028*readiness;career.form+=.14}
+ else if(p==='anaerobic'){career.wp*=1+.0135*gain;career.p1m*=1+.0080*gain;career.p5s*=1+.0082*gain;career.form+=.11}
+ else if(p==='mixed'){career.cp*=1+.0054*gain;career.wp*=1+.0090*gain;career.vo2*=1+.0036*gain;career.p1m*=1+.0035*gain;career.form+=.12}
+ else if(p==='climbing'){career.cp*=1+.0064*gain;career.vo2*=1+.0040*gain;career.form+=.11}
+ else if(p==='tt'){career.cp*=1+.0062*gain;career.p20m*=1+.0058*gain;career.form+=.10}
  else if(p==='technique'){career.form+=.035}
- else{career.cp*=1+.0014*readiness;career.wp*=1+.0022*readiness;career.form=Math.max(-.5,career.form-.03)}
+ else{career.cp*=1+.0018*readiness;career.wp*=1+.0030*readiness;career.form=Math.max(-.5,career.form-.03)}
  let skillGain=TrainingEngine.applySkills(gain);let raceTac=clamp(((lr.decisionQ||.55)-.52)*1.8,0,.38);if(raceTac>0){let td=RiderEngine.adaptSkill('tactics',raceTac);skillGain.tactics=(skillGain.tactics||0)+td}
  let used=new Set(Object.keys(TrainingEngine.selected()?.skills||{}));for(const k of Object.keys(career.skills)){if(!used.has(k)&&p!=='recovery'&&career.skills[k]>72)career.skills[k]=Math.max(45,career.skills[k]-.018*iLoad)}CareerWorld.sync();let hydCarry=(lr.hydr||0)*18;if(career.recoveryPlan==='camp')hydCarry*=.35;else if(career.recoveryPlan==='physio')hydCarry*=.65;if(career.nutritionPlan==='pro')hydCarry*=.78;career.recoveryDebt=clamp(debt-recoveryGain+hydCarry+(p==='vo2'||p==='anaerobic'||p==='mixed'?overload*30:0),0,180);career.chronicFatigue=clamp(career.chronicFatigue*.72+planLoad*.24-recoveryGain*.22+hydCarry*.10,0,130);career.chronicLoad=clamp(career.chronicLoad*.90+planLoad*.18,0,140);let freshGain=clamp(recoveryGain/100-overload*.27-postHydPenalty*.18,.03,.72);career.fresh=clamp(career.fresh+freshGain-(['vo2','anaerobic','mixed'].includes(p)?.10: p==='threshold'?.06:0),.25,1);career.condition=clamp(.58+career.form*.08+career.chronicLoad*.0025-career.chronicFatigue*.0038+career.fresh*.30,.40,1.12);if(career.weightPlan==='lean'){let safe=career.fresh>.62&&career.chronicFatigue<90&&lr.hydr<.65;career.mass=clamp(career.mass-(safe?.16:.04)*(career.equipment.nutrition?1.15:1),62,92);career.fresh=clamp(career.fresh-.04,.25,1)}else if(career.weightPlan==='fuel'){career.fresh=clamp(career.fresh+.06,.25,1);career.mass=clamp(career.mass+.04,62,92)}career.pelotonLevel=1;career.racePrep={electrolytes:ex.has('electrolytes'),carbpack:ex.has('carbpack'),analysis:ex.has('analysis'),service:ex.has('service'),aero:ex.has('aero')};let completedProgram=TrainingEngine.selected();let dayLoads=(completedProgram?.days||[]).map(d=>Number(d.load||0)).filter(Boolean),mono=dayLoads.length>1?clamp(100-(Math.max(...dayLoads)-Math.min(...dayLoads))*1.2,8,92):35;AthleteEngine.afterTraining({family:p,load:planLoad,quality,recovery:recoveryGain,intensity,monotony:mono});let devXP=LevelEngine.trainingXP(planLoad,quality,stimulus),levelResult=LevelEngine.addXP(devXP,'ENTRENAMIENTO');career.week++;career.needsTraining=false;career.lastAdapt={plan:p,program:completedProgram?.title||p,dCP:career.cp-before.cp,dWP:career.wp-before.wp,dVO2:career.vo2-before.vo2,dFresh:career.fresh-before.fresh,dCondition:career.condition-before.condition,readiness,overload,intensity,skills:skillGain,stimulus,quality,channel,delayed};career.trainingHistory.unshift({week:career.week,program:completedProgram?.title||p,plan:p,load:Math.round(planLoad),readiness,overload,stimulus,quality,dCP:career.cp-before.cp,dWP:career.wp-before.wp,dVO2:career.vo2-before.vo2,skills:{...skillGain},mass:career.mass});career.trainingHistory=career.trainingHistory.slice(0,80);career.plan=null;career.selectedProgram=null;career.weekExtras=[];career.trainingSeed=(career.trainingSeed||1)+1;document.querySelectorAll('.workouts button').forEach(b=>b.classList.remove('selected'));$('completeWeek').disabled=true;$('adaptCP').textContent=(career.lastAdapt.dCP>=0?'+':'')+Math.round(career.lastAdapt.dCP)+' W';$('adaptWP').textContent=(career.lastAdapt.dWP>=0?'+':'')+Math.round(career.lastAdapt.dWP/1000)+' kJ';$('adaptVO2').textContent=(career.lastAdapt.dVO2>=0?'+':'')+Math.round(career.lastAdapt.dVO2*10)/10;$('adaptFresh').textContent=Math.round(career.fresh*100)+'%';$('adaptText').textContent=`Asimilación ${Math.round(readiness*100)}% · calidad ${Math.round(quality*100)}% · estímulo ${Math.round(stimulus*100)}% · +${devXP} XP desarrollo${levelResult.up?` · SUBES A NIVEL ${levelResult.level}`:''} · condición ${Math.round(career.condition*100)}% · masa ${career.mass.toFixed(1)} kg.`;$('adaptResult').classList.add('show');pushWeeklySnapshot();saveCareer();$('weekEffect').textContent=overload>.35?'Semana completada, pero había fatiga/deuda: parte del estímulo no se ha asimilado.':(lr.hydr>.75?'Semana completada. La deshidratación de la carrera todavía ha reducido la calidad de adaptación.':'Semana completada y bien asimilada.');updateCareerUI()}
 function openCareer(tab='profile'){if(running&&!finished)return;renderWeekExtras();$('careerOverlay').classList.add('open');document.querySelectorAll('.ctab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));document.querySelectorAll('.careerPane').forEach(p=>p.classList.toggle('active',p.dataset.pane===tab));updateCareerUI()}
@@ -2097,6 +2097,255 @@ window.__ALUA_V64={
   player:()=>({power:Math.round(P.power),requested:Math.round(P.basePower),speed:+(P.speed*3.6).toFixed(1),wp:+(P.wp/cfg.wp*100).toFixed(1),fat:+((P.fat||0)*100).toFixed(1),gly:+P.gly.toFixed(1),hyd:+(P.fluidDef*100).toFixed(2)})
 };
 
+
+
+// =============================
+// V65 · TRAINING / BUDGET / NUTRITION CLARITY
+// =============================
+console.info('ALUA Simulator V65 · training depth + reserved budget + nutrition clarity');
+
+const V65Budget={
+  reserved(){return career.needsTraining?Math.max(0,weekCost()):0},
+  available(){return Math.max(0,career.money-this.reserved())},
+  canSpend(cost){return Number(cost)<=this.available()+.001},
+  text(){return `Disponible ${euro(this.available())} · reservado semana ${euro(this.reserved())}`}
+};
+
+// Do not let weekly choices create a negative plan. Reject the click before committing it.
+const _v65SelectWeekOption=selectWeekOption;
+selectWeekOption=function(kind,val){
+  if(!career.needsTraining)return;
+  const key=kind+'Plan',old=career[key];career[key]=val;
+  const cost=weekCost();career[key]=old;
+  if(cost>career.money){
+    if($('weekEffect'))$('weekEffect').textContent=`No puedes elegir esa opción: la semana costaría ${euro(cost)} y tienes ${euro(career.money)}.`;
+    return;
+  }
+  _v65SelectWeekOption(kind,val);
+};
+
+// Extras also respect the same budget before they can be selected.
+renderWeekExtras=function(){
+  ensureWeekExtras();let box=$('weekExtras');if(!box)return;box.innerHTML='';
+  for(const [id,e] of Object.entries(weekExtrasCatalog)){
+    let selected=career.weekExtras.includes(id),price=extraPrice(id),b=document.createElement('button');
+    let projected=weekCost()+(selected?-price:price),blocked=!selected&&projected>career.money;
+    b.className='weekExtra'+(selected?' selected':'');b.dataset.extra=id;b.disabled=blocked;
+    b.innerHTML=`<b>${e.name}</b><small>€${price} · ${e.desc}</small><span>${blocked?'SIN PRESUPUESTO':e.tag}</span>`;
+    b.onclick=()=>{if(!career.needsTraining)return;let a=new Set(career.weekExtras);a.has(id)?a.delete(id):a.add(id);career.weekExtras=[...a];renderWeekExtras();updateWeekEconomy()};box.appendChild(b)
+  }
+};
+
+// Money reserved for the selected week cannot be spent in upgrades.
+const _v65BuyEquipment=buyEquipment;
+buyEquipment=function(id){let d=shopDefs[id],lv=partLevel(id),cost=d?.legacy?upgradeCost(id):(lv>=3?LevelEngine.componentUpgradeCost(id):upgradeCost(id,lv));if(Number.isFinite(cost)&&!V65Budget.canSpend(cost)){if($('weekEffect'))$('weekEffect').textContent=`${V65Budget.text()}. No puedes gastar ${euro(cost)} sin dejar la semana en negativo.`;return false}return _v65BuyEquipment(id)};
+const _v65BuyFood=buyFoodLevel;
+buyFoodLevel=function(kind){let cost=LevelEngine.foodUpgradeCost(kind);if(!V65Budget.canSpend(cost)){if($('weekEffect'))$('weekEffect').textContent=`${V65Budget.text()}. Esa mejora cuesta ${euro(cost)}.`;return false}return _v65BuyFood(kind)};
+const _v65BikeBuy=V45BikeEngine.buy.bind(V45BikeEngine);
+V45BikeEngine.buy=function(k){let cost=this.cost(k);if(!V65Budget.canSpend(cost)){if($('weekEffect'))$('weekEffect').textContent=`${V65Budget.text()}. Mejora bloqueada.`;return false}return _v65BikeBuy(k)};
+const _v65FacBuy=FacilityEngine.buy.bind(FacilityEngine);
+FacilityEngine.buy=function(k){let cost=this.cost(k);if(!V65Budget.canSpend(cost)){if($('weekEffect'))$('weekEffect').textContent=`${V65Budget.text()}. Centro bloqueado por presupuesto reservado.`;return false}return _v65FacBuy(k)};
+
+const _v65RenderShop=renderShop;
+renderShop=function(){_v65RenderShop();let avail=V65Budget.available();document.querySelectorAll('#shopGrid [data-buy]').forEach(b=>{let id=b.dataset.buy,d=shopDefs[id],lv=partLevel(id),cost=d?.legacy?upgradeCost(id):(lv>=3?LevelEngine.componentUpgradeCost(id):upgradeCost(id,lv));if(Number.isFinite(cost)&&cost>avail)b.disabled=true});document.querySelectorAll('#shopGrid [data-food]').forEach(b=>{if(LevelEngine.foodUpgradeCost(b.dataset.food)>avail)b.disabled=true})};
+
+// More elaborate generated plans: real seven-day structure, duration, load distribution and a clear target.
+const V65PlanTemplates={
+ endurance:[['L','🌿','REC 30 min',8,30],['M','🚴','Z2 90 min + 3×8 tempo',44,90],['X','⚙️','Cadencia + fuerza 60 min',34,60],['J','🌿','Z1 35 min',10,35],['V','🚴','Z2 progresivo 75 min',40,75],['S','🔥','Fondo 2h30 + tempo final',70,150],['D','🌿','OFF / movilidad',0,0]],
+ threshold:[['L','🌿','REC 30 min',8,30],['M','🔥','3×12 min @ 98–102% CP',68,80],['X','🚴','Z2 60 min',28,60],['J','🔥','Over-under 4×8',64,75],['V','🌿','REC 35 min',10,35],['S','⚙️','2×20 min sweet spot',58,100],['D','🌿','OFF',0,0]],
+ vo2:[['L','🌿','REC 30 min',8,30],['M','🔥','5×3 min VO₂',78,70],['X','🚴','Z2 60 min',28,60],['J','⚡','30/30 · 3 bloques',74,65],['V','🌿','REC 35 min',10,35],['S','🔥','4×4 min + final libre',72,90],['D','🌿','OFF',0,0]],
+ anaerobic:[['L','🌿','REC 30 min',8,30],['M','⚡','8×10 s sprint',68,60],['X','🚴','Z2 55 min',26,55],['J','🔥','6×1 min máxima',82,65],['V','🌿','OFF / movilidad',4,20],['S','⚡','Sprint lanzado + 40/20',76,75],['D','🌿','REC 35 min',10,35]],
+ mixed:[['L','🌿','REC 30 min',8,30],['M','⚙️','Relevos + cambios 20/40',58,75],['X','🚴','Z2 60 min',28,60],['J','🎯','Simulación carrera 70 min',72,70],['V','🌿','REC 30 min',8,30],['S','🔥','Grupo reducido + final',70,100],['D','🌿','OFF',0,0]],
+ technique:[['L','🌿','REC 30 min',8,30],['M','🎯','Curvas + frenada 60 min',38,60],['X','🚴','Z2 50 min',24,50],['J','🎯','Descenso técnico',44,65],['V','🌿','OFF',0,0],['S','🚴','Trazada + velocidad progresiva',42,80],['D','🌿','REC 30 min',8,30]],
+ recovery:[['L','🌿','OFF',0,0],['M','🌿','Z1 35 min',10,35],['X','🧘','Movilidad + sueño',6,25],['J','🚴','Z2 corto 45 min',18,45],['V','🌿','OFF',0,0],['S','🚴','Rodaje regenerativo 50 min',20,50],['D','🌿','OFF',0,0]],
+ climbing:[['L','🌿','REC 30 min',8,30],['M','🔥','5×6 min subida',72,80],['X','🚴','Z2 60 min',28,60],['J','⚙️','Cadencia baja 4×8',62,75],['V','🌿','REC 30 min',8,30],['S','🔥','Puerto largo + final rampa',76,120],['D','🌿','OFF',0,0]],
+ tt:[['L','🌿','REC 30 min',8,30],['M','⚙️','3×12 min aero',62,75],['X','🚴','Z2 55 min',26,55],['J','🔥','Pacing 95–105% CP',66,70],['V','🌿','REC 30 min',8,30],['S','⏱️','20 min crono + negative split',70,90],['D','🌿','OFF',0,0]]
+};
+const _v65Generate=TrainingEngine.generate.bind(TrainingEngine);
+TrainingEngine.generate=function(){let arr=_v65Generate();for(const p of arr){let t=V65PlanTemplates[p.family]||V65PlanTemplates.mixed;p.days=t.map(x=>({day:x[0],icon:x[1],name:x[2],load:x[3],duration:x[4]}));p.duration=p.days.reduce((n,d)=>n+d.duration,0);p.load=Math.round(p.days.reduce((n,d)=>n+d.load,0)/Math.max(1,p.days.filter(d=>d.duration>0).length));p.effect={endurance:'CP + durabilidad + recuperación',threshold:'CP / potencia sostenible',vo2:'VO₂ + techo aeróbico',anaerobic:'W′ + 1 min + sprint',mixed:'W′ + CP + táctica',technique:'bajada + táctica + control',recovery:'frescura + asimilación',climbing:'CP + VO₂ + subida',tt:'CP + 20 min + CRI'}[p.family]||'adaptación mixta'}career.generatedPrograms=arr;return arr};
+TrainingEngine.sessions=function(p=this.selected()){if(!p)return[];if(!p.days)this.generate(),p=this.selected();return (p?.days||[]).map(d=>[d.day,d.icon,d.name,d.load>=65?'hard key':d.load<=12?'easy':'key'])};
+TrainingEngine.render=function(){let arr=this.generate(),rec=coachRecommendation(),box=$('trainingPrograms');if(!box)return;box.innerHTML=arr.map(p=>`<button data-plan="${p.family}" data-program="${p.id}" class="${career.selectedProgram?.id===p.id?'selected':''} ${rec.p===p.family?'recommended':''}"><b>${p.title}<em class="progLoad">${p.load}</em></b><span>${p.subtitle} · ${Math.floor(p.duration/60)}h${String(p.duration%60).padStart(2,'0')}</span><small class="v65Effect">${p.effect}</small><div class="programMeta">${Object.keys(p.skills).slice(0,3).map(k=>`<i>${({climb:'SUBIDA',flat:'LLANO',descend:'BAJADA',tt:'CRI',sprint:'SPRINT',endurance:'FONDO',recovery:'REC',tactics:'TÁCTICA'}[k]||k)}</i>`).join('')}</div></button>`).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>selectPlan(b.dataset.plan,b.dataset.program))};
+
+// Clear, playable gastric limits. Gel can be queued but not infinitely; drinking allows partial sips near the limit.
+eatGel=function(){
+  if(P.gels<1){if($('msg'))$('msg').textContent='⚡ No quedan geles.';return false}
+  const lv=career.foodLevels?.gel||1,q=LevelEngine.foodEffect('gel'),gutCap=90+Math.min(45,(lv-1)*5),room=gutCap-(P.gut||0);
+  if(room<15){if($('msg'))$('msg').textContent=`⚡ Intestino cargado: ${Math.round(P.gut||0)}/${gutCap} g pendientes. Espera a absorber antes de otro gel.`;return false}
+  const dose=Math.min(30*q,room);P.gels--;P.gut=(P.gut||0)+dose;P.glu=clamp(P.glu+3.5*q,58,145);P.carbBoost=Math.max(P.carbBoost||0,42*q);updateInventoryButtons();sfx('food');fuelBurst('gel',`GEL N${lv} · ${Math.round(dose)} g CHO`,`pendiente ${Math.round(P.gut)} g`);if($('msg'))$('msg').textContent=`⚡ Gel: ${Math.round(dose)} g al intestino · ${Math.round(P.gut)} g pendientes. La barra muestra ahora esa energía "en camino".`;return true
+};
+
+drink=function(mode='normal'){
+  const lv=career.foodLevels?.drink||1,q=LevelEngine.foodEffect('drink'),cap=BikeEngine.spec().bottle,gutCap=650+Math.min(300,(lv-1)*35)+(career.racePrep?.electrolytes?80:0),gut=P.waterGutMl||0,room=gutCap-gut;
+  if(P.bottleMl<60){if($('msg'))$('msg').textContent=`💧 Bidón prácticamente vacío: quedan ${Math.round(P.bottleMl)} ml.`;return false}
+  if(room<60){if($('msg'))$('msg').textContent=`💧 Estómago lleno: ${Math.round(gut)}/${Math.round(gutCap)} ml pendientes. Espera a absorber antes de beber más.`;return false}
+  const sip=Math.min(150,P.bottleMl,room),rapid=Math.min(sip,34+24*(q-1));P.bottleMl-=sip;P.drunkMl=(P.drunkMl||0)+sip;P.waterGutMl=gut+sip-rapid;P.waterAbsorbedMl=(P.waterAbsorbedMl||0)+rapid;P.fluidDef=Math.max(0,P.fluidDef-rapid/(cfg.mass*1000));P.coolBoost=Math.max(P.coolBoost||0,(mode==='wheel'?26:34)*q);P.core=Math.max(36.85,P.core-.008);updateInventoryButtons();sfx('water');fuelBurst('water',`BEBIDA N${lv} · ${Math.round(sip)} ml`,`${Math.round(rapid)} ml rápidos · ${Math.round(P.waterGutMl)} ml pendientes`);if($('msg'))$('msg').textContent=`💧 Bebes ${Math.round(sip)} ml: ${Math.round(rapid)} ml disponibles ya · ${Math.round(P.waterGutMl)} ml en absorción · bidón ${Math.round(P.bottleMl)}/${Math.round(cap)} ml.`;return true
+};
+
+// Nutrition HUD: show pending intake instead of looking frozen.
+const _v65Hud=V50HUD.sync.bind(V50HUD);
+V50HUD.sync=function(){_v65Hud();const gut=Math.round(P.gut||0),wg=Math.round(P.waterGutMl||0),effective=Math.min(cfg.gly,P.gly+Math.min(65,(P.gut||0)*.85)),energy=clamp((effective-145)/Math.max(1,cfg.gly-145)*100,0,100);if($('v46GlyBar'))$('v46GlyBar').style.width=energy+'%';if($('v46Gly'))$('v46Gly').textContent=gut>5?`${Math.round(P.gly)}g +${gut}`:`${Math.round(P.gly)}g`;if($('v49EnergyState')&&gut>5)$('v49EnergyState').textContent=`ABSORBE ${gut}g`;if($('v49WaterState')&&wg>20)$('v49WaterState').textContent=`ABSORBE ${wg}ml`;};
+
+const _v65Inv=updateInventoryButtons;
+updateInventoryButtons=function(){_v65Inv();let lv=career.foodLevels?.drink||1,gutCap=650+Math.min(300,(lv-1)*35)+(career.racePrep?.electrolytes?80:0),blocked=(P.waterGutMl||0)>gutCap-60;if($('mWater')){$('mWater').disabled=P.bottleMl<60||blocked;$('mWater').title=blocked?`Estómago ${Math.round(P.waterGutMl)}/${gutCap} ml`:''}if($('bottle')){$('bottle').disabled=P.bottleMl<60||blocked;$('bottle').title=blocked?`Absorbiendo ${Math.round(P.waterGutMl)} ml`:''}};
+
+
+// === V66 · CURVA 5 PUNTAS + GEL COOLDOWN + PRESUPUESTO VISIBLE + SPRINT ===
+const V66={
+  gelLast:0,
+  gelCooldown(){let lv=career.foodLevels?.gel||1;return Math.max(7000,10500-(lv-1)*350)},
+  focusGain:{
+    p5s:{label:'5 s',family:'anaerobic'},
+    p1m:{label:'1 min',family:'anaerobic'},
+    p5m:{label:'5 min',family:'vo2'},
+    p20m:{label:'20 min',family:'threshold'},
+    cp:{label:'CP / FTP',family:'threshold'},
+    mixed:{label:'CURVA MIXTA',family:'mixed'}
+  },
+  variations:{
+    p5s:[
+      {title:'MEJORAR SPRINT · 5 s ↑↑ + 1 min ↑ · Salida brutal',sub:'10×6 s desde baja velocidad',days:['8×6 s torque + 4 lanzados','Z2 + técnica de aceleración','10×8 s máxima recuperación completa']},
+      {title:'MEJORAR SPRINT · 5 s ↑↑ + 1 min ↑ · Sprint lanzado',sub:'velocidad + pico neuromuscular',days:['6×10 s lanzados','Z2 60 min + 5 arranques','8×8 s a rueda + remate']},
+      {title:'MEJORAR SPRINT · 5 s ↑↑ + 1 min ↑ · Doble remate',sub:'pico + capacidad de repetir',days:['2 bloques 5×7 s','fuerza/cadencia + Z2','6 s + 12 s por parejas']}
+    ],
+    p1m:[
+      {title:'MEJORAR PUNCHEUR · 1 min ↑↑ + 5 s/W′ ↑ · Kilómetro rojo',sub:'6×45–60 s muy fuerte',days:['6×1 min / 4 min rec','Z2 + 6×20 s','4×75 s progresivas']},
+      {title:'MEJORAR ATAQUES · 1 min ↑↑ + 5 s/W′ ↑ · Ataque y sostén',sub:'30 s explosivos + 45 s sostén',days:['6×(30 s + 45 s)','Z2 65 min','5×1 min en falso llano']},
+      {title:'MEJORAR ATAQUES · 1 min ↑↑ + W′/5 s ↑ · Repetibilidad',sub:'W′ y tolerancia al lactato',days:['8×40 s / 2:20 rec','rodaje suave + técnica','3 bloques 4×30/30']}
+    ],
+    p5m:[
+      {title:'MEJORAR ESCALADOR · 5 min ↑↑ + 20 min/CP ↑ · VO₂ largo',sub:'5×4–5 min',days:['5×4 min @ VO₂','Z2 60 min','4×5 min subida']},
+      {title:'MEJORAR ESCALADOR · 5 min ↑↑ + 20 min/CP ↑ · Techo aeróbico',sub:'3–6 min con recuperación corta',days:['6×3 min fuerte','Z2 + 5×30 s','4×5 min negative split']},
+      {title:'MEJORAR ESCALADOR · 5 min ↑↑ + CP ↑ · Puerto corto',sub:'potencia de 3–6 min en pendiente',days:['5×5 min 5–7%','Z2 75 min','3×6 min + final libre']}
+    ],
+    p20m:[
+      {title:'MEJORAR ESCALADOR · 20 min ↑↑ + CP/5 min ↑ · Umbral largo',sub:'2×20 min / 8 min rec',days:['2×20 min 96–101%','Z2 60 min','3×15 min over-under']},
+      {title:'MEJORAR FONDO/UMBRAL · 20 min ↑↑ + CP ↑ · Sweet spot duro',sub:'volumen cerca de CP',days:['3×15 min 92–98%','Z2 75 min','25 min progresivos + 10 min CP']},
+      {title:'MEJORAR CONTRARRELOJ · 20 min ↑↑ + CP ↑ · CRI sostenida',sub:'pacing y aero',days:['20 min aero + 10 min','Z2 + posición','2×18 min negative split']}
+    ],
+    cp:[
+      {title:'MEJORAR RESISTENCIA · CP/FTP ↑↑ + 20 min ↑ · Potencia crítica',sub:'bloques alrededor de CP',days:['4×8 min 100–105% CP','Z2 75 min','3×12 min over-under']},
+      {title:'MEJORAR RESISTENCIA · CP/FTP ↑↑ + 20 min ↑ · Motor sostenible',sub:'tempo alto + umbral',days:['3×12 min CP','Z2 90 min + tempo','2×20 min 95–100%']},
+      {title:'MEJORAR FONDO · CP/FTP ↑↑ + 20 min/5 min ↑ · Resistencia a fatiga',sub:'CP después de fondo',days:['2×15 min CP','Z2 75 min','2 h Z2 + 20 min 95%']}
+    ],
+    mixed:[
+      {title:'MEJORAR CICLISTA COMPLETO · 5 s + 1 min + 5 min + 20 min + CP',sub:'5 s + 1 m + 5 m + 20 m + CP',days:['sprints + 3×1 min','4×4 min VO₂','20 min CP tras Z2']},
+      {title:'MEJORAR TÉCNICA DE CARRERA · 5 s + 1 min + 5 min + 20 min + CP',sub:'ataques, VO₂, umbral y sprint',days:['6×30/30 + 4 sprints','3×5 min','simulación 90 min + final']}
+    ]
+  }
+};
+
+// Training choices are now explicitly organised around the five power-duration points.
+TrainingEngine.generate=function(){
+  RiderEngine.ensure();
+  const seedBase=`${career.week}-${career.races}-${career.trainingSeed||1}`;
+  const order=['p5s','p1m','p5m','p20m','cp','mixed'];
+  const skills={
+    p5s:{sprint:.62,tactics:.12},
+    p1m:{sprint:.30,climb:.16,tactics:.10},
+    p5m:{climb:.30,endurance:.18,tt:.12},
+    p20m:{tt:.28,endurance:.24,flat:.18},
+    cp:{endurance:.32,flat:.22,climb:.18,tt:.14},
+    mixed:{tactics:.24,endurance:.18,sprint:.15,climb:.12,flat:.12}
+  };
+  const load={p5s:66,p1m:75,p5m:74,p20m:67,cp:65,mixed:70};
+  const arr=order.map((focus,i)=>{
+    const vars=V66.variations[focus], vi=TrainingEngine.hash(seedBase+'-'+focus)%vars.length, v=vars[vi];
+    const family=V66.focusGain[focus].family;
+    const hard=load[focus];
+    const dayLoads=[8,hard,28,Math.max(38,hard-10),8,Math.max(50,hard-3),0];
+    const durations=[30,65,60,70,30,focus==='cp'||focus==='p20m'?105:85,0];
+    const days=[
+      {day:'L',icon:'🌿',name:'REC 30 min',load:8,duration:30},
+      {day:'M',icon:'🔥',name:v.days[0],load:dayLoads[1],duration:durations[1]},
+      {day:'X',icon:'🚴',name:'Z2 60 min',load:28,duration:60},
+      {day:'J',icon:'⚙️',name:v.days[1],load:dayLoads[3],duration:durations[3]},
+      {day:'V',icon:'🌿',name:'DESCARGA / movilidad',load:8,duration:30},
+      {day:'S',icon:'⚡',name:v.days[2],load:dayLoads[5],duration:durations[5]},
+      {day:'D',icon:'🌿',name:'OFF',load:0,duration:0}
+    ];
+    return {id:`v66-${focus}-${career.week}-${vi}`,family,title:v.title,subtitle:v.sub,load:Math.round(days.filter(d=>d.duration).reduce((a,d)=>a+d.load,0)/6),skills:skills[focus],days,duration:days.reduce((a,d)=>a+d.duration,0),effect:`FOCO ${V66.focusGain[focus].label} · variación ${vi+1}/${vars.length}`,powerFocus:focus};
+  });
+  career.generatedPrograms=arr;return arr;
+};
+TrainingEngine.sessions=function(p=this.selected()){if(!p)return[];return (p.days||[]).map(d=>[d.day,d.icon,d.name,d.load>=64?'hard key':d.load<=12?'easy':'key'])};
+TrainingEngine.render=function(){let arr=this.generate(),box=$('trainingPrograms');if(!box)return;box.innerHTML=arr.map(p=>`<button data-plan="${p.family}" data-program="${p.id}" class="${career.selectedProgram?.id===p.id?'selected':''}"><b>${p.title}<em class="progLoad">${p.load}</em></b><span>${p.subtitle} · ${Math.floor(p.duration/60)}h${String(p.duration%60).padStart(2,'0')}</span><small class="v65Effect">${p.effect}</small><div class="programMeta"><i>5 PUNTAS</i><i>${V66.focusGain[p.powerFocus].label}</i><i>${p.family.toUpperCase()}</i></div></button>`).join('');box.querySelectorAll('button').forEach(b=>b.onclick=()=>selectPlan(b.dataset.plan,b.dataset.program))};
+
+// Give the selected P-D point a visible, specific adaptation after the normal weekly engine runs.
+const _v66CompleteWeek=completeWeek;
+completeWeek=function(){
+  const sel=TrainingEngine.selected(), focus=sel?.powerFocus, oldWeek=career.week;
+  const before={p5s:career.p5s,p1m:career.p1m,p5m:career.p5m,p20m:career.p20m,cp:career.cp,wp:career.wp,vo2:career.vo2};
+  _v66CompleteWeek();
+  if(career.week===oldWeek||!focus)return;
+  const q=clamp(career.lastAdapt?.quality||.75,.45,1.08), r=clamp(career.lastAdapt?.readiness||.75,.45,1.08), f=.72+.28*q*r;
+  if(focus==='p5s'){career.p5s*=1+.0105*f;career.p1m*=1+.0018*f;career.wp*=1+.0022*f;RiderEngine.adaptSkill('sprint',.26*f)}
+  else if(focus==='p1m'){career.p1m*=1+.0090*f;career.wp*=1+.0052*f;career.p5s*=1+.0015*f;RiderEngine.adaptSkill('sprint',.15*f)}
+  else if(focus==='p5m'){career.p5m*=1+.0080*f;career.vo2*=1+.0028*f;career.cp*=1+.0015*f;RiderEngine.adaptSkill('climb',.15*f)}
+  else if(focus==='p20m'){career.p20m*=1+.0070*f;career.cp*=1+.0026*f;career.p5m*=1+.0013*f;RiderEngine.adaptSkill('tt',.14*f)}
+  else if(focus==='cp'){career.cp*=1+.0050*f;career.p20m*=1+.0030*f;career.p5m*=1+.0010*f;RiderEngine.adaptSkill('endurance',.16*f)}
+  else {career.p5s*=1+.0028*f;career.p1m*=1+.0030*f;career.p5m*=1+.0027*f;career.p20m*=1+.0024*f;career.cp*=1+.0022*f;career.wp*=1+.0025*f;RiderEngine.adaptSkill('technique',.14*f);RiderEngine.adaptSkill('tactics',.10*f)}
+  if(career.lastAdapt){career.lastAdapt.powerFocus=focus;career.lastAdapt.powerDelta={p5s:career.p5s-before.p5s,p1m:career.p1m-before.p1m,p5m:career.p5m-before.p5m,p20m:career.p20m-before.p20m,cp:career.cp-before.cp};}
+  saveCareer();updateCareerUI();
+  if($('weekEffect'))$('weekEffect').textContent+=` · Foco ${V66.focusGain[focus].label}: adaptación específica aplicada.`;
+};
+
+// Gel: shorter active boost, faster digestion visibility, and mandatory real-time spacing between gels.
+const _v66UpdatePhys=updatePhys;
+updatePhys=function(dt){
+  const gut0=P.gut||0;_v66UpdatePhys(dt);
+  // Extra gastric emptying is modest but makes the pending-gel number fall visibly faster.
+  if((P.gut||0)>0){const extra=Math.min(P.gut,0.30*dt/60);P.gut-=extra;P.gly=clamp(P.gly+extra*.80,0,cfg.gly)}
+};
+eatGel=function(){
+  if(P.gels<1){if($('msg'))$('msg').textContent='⚡ No quedan geles.';return false}
+  const now=performance.now(), cd=V66.gelCooldown(), left=cd-(now-V66.gelLast);
+  if(V66.gelLast&&left>0){if($('msg'))$('msg').textContent=`⚡ GEL EN ABSORCIÓN · espera ${Math.ceil(left/1000)} s antes del siguiente.`;return false}
+  const lv=career.foodLevels?.gel||1,q=LevelEngine.foodEffect('gel'),gutCap=82+Math.min(38,(lv-1)*4),room=gutCap-(P.gut||0);
+  if(room<15){if($('msg'))$('msg').textContent=`⚡ Intestino cargado: ${Math.round(P.gut||0)}/${gutCap} g pendientes.`;return false}
+  const dose=Math.min(30*q,room);P.gels--;P.gut=(P.gut||0)+dose;P.glu=clamp(P.glu+3*q,58,145);P.carbBoost=Math.max(P.carbBoost||0,27*q);V66.gelLast=now;
+  updateInventoryButtons();sfx('food');fuelBurst('gel',`GEL N${lv} · ${Math.round(dose)} g CHO`,`siguiente en ${Math.round(cd/1000)} s`);if($('msg'))$('msg').textContent=`⚡ Gel tomado · ${Math.round(dose)} g pendientes · próximo gel en ${Math.round(cd/1000)} s.`;return true
+};
+const _v66UpdateInv=updateInventoryButtons;
+updateInventoryButtons=function(){_v66UpdateInv();const left=Math.max(0,V66.gelCooldown()-(performance.now()-V66.gelLast)),blocked=V66.gelLast&&left>0;for(const id of ['gel','mGel']){let b=$(id);if(!b)continue;b.disabled=!!blocked||P.gels<1;b.classList.toggle('gelCooldown',!!blocked);if(blocked)b.title=`Gel disponible en ${Math.ceil(left/1000)} s`}};
+const _v66Reset=reset;
+reset=function(go=false){V66.gelLast=0;return _v66Reset(go)};
+
+// Sprint must be visually and mechanically decisive: stronger launch, stronger remate, slightly higher short-duration cap.
+const _v66SmartSprint=smartSprint;
+smartSprint=function(){let had=!!P.sprint,rem=!!P.sprint?.remated;_v66SmartSprint();if(P.sprint){if(!had){P.sprint.power*=1.12;P.sprint.t=Math.min(3.25,P.sprint.t*1.12+.15);cameraKick=Math.max(cameraKick,18);speedFx=1}else if(!rem&&P.sprint.remated){P.sprint.power*=1.08;cameraKick=Math.max(cameraKick,20)}}};
+const _v66V47Press=V47SprintEngine.press.bind(V47SprintEngine);
+V47SprintEngine.press=function(){let had=!!P.sprint,rem=!!P.sprint?.remated;_v66V47Press();if(P.sprint){if(!had){P.sprint.power*=1.11;P.sprint.t=Math.min(3.55,P.sprint.t*1.10+.18);cameraKick=Math.max(cameraKick,18)}else if(!rem&&P.sprint.remated){P.sprint.power*=1.07;cameraKick=Math.max(cameraKick,20)}}};
+const _v66PrePower=V48Bio.prePower.bind(V48Bio);
+V48Bio.prePower=function(dt,requested){let cap=_v66PrePower(dt,requested);if(P.sprint){let shortCap=Math.max(career.p5s||900,V48Bio.curve(Math.max(1,Math.min(8,V48Bio.s?.effortT||3))))*1.10;cap=Math.max(cap,Math.min(requested,shortCap));if(this.s){this.s.lastCap=cap;this.s.reason='SPRINT · PUNTA 5 s'}}return cap};
+
+// Budget visibility: unavailable upgrades are not just disabled, their whole card is shaded using AVAILABLE money after reservation.
+function V66ShadeBudget(){
+  const avail=V65Budget.available();
+  document.querySelectorAll('#shopGrid .shopItem').forEach(row=>{
+    let b=row.querySelector('[data-buy],[data-food]');if(!b)return;
+    let cost=b.dataset.food?LevelEngine.foodUpgradeCost(b.dataset.food):(()=>{let id=b.dataset.buy,d=shopDefs[id],lv=partLevel(id);return d?.legacy?upgradeCost(id):(lv>=3?LevelEngine.componentUpgradeCost(id):upgradeCost(id,lv))})();
+    let maxed=row.classList.contains('maxed')||/MAX|MÁX/i.test(b.textContent||'');
+    let lock=Number.isFinite(cost)&&cost>avail&&!maxed;
+    row.classList.toggle('budgetLocked',lock);b.disabled=maxed||lock;
+    if(lock)b.title=`Disponible ${euro(avail)} · faltan ${euro(cost-avail)}`;else if(!maxed)b.removeAttribute('title');
+  });
+  document.querySelectorAll('#v45UpgradeContent .v45UpgradeItem').forEach(row=>{
+    let b=row.querySelector('[data-v45bike],[data-v45fac],[data-v45food]');if(!b)return;
+    let cost=b.dataset.v45bike?V45BikeEngine.cost(b.dataset.v45bike):b.dataset.v45fac?FacilityEngine.cost(b.dataset.v45fac):LevelEngine.foodUpgradeCost(b.dataset.v45food);
+    let maxed=row.classList.contains('maxed')||/MAX|MÁX/i.test(b.textContent||'');
+    let lock=Number.isFinite(cost)&&cost>avail&&!maxed;
+    row.classList.toggle('budgetLocked',lock);b.disabled=maxed||lock;
+    if(lock)b.title=`Presupuesto libre ${euro(avail)}`;else if(!maxed)b.removeAttribute('title');
+  });
+}
+const _v66RenderShop=renderShop;renderShop=function(){_v66RenderShop();V66ShadeBudget()};
+const _v66RenderUpgrades=V45UI.renderUpgrades.bind(V45UI);V45UI.renderUpgrades=function(){_v66RenderUpgrades();V66ShadeBudget()};
+const _v66UpdateWeekEconomy=updateWeekEconomy;updateWeekEconomy=function(){_v66UpdateWeekEconomy();if($('shopGrid'))V66ShadeBudget();if($('v45UpgradeContent'))V66ShadeBudget()};
+
+window.__ALUA_V66={version:'66-five-point-training',training:()=>TrainingEngine.generate().map(p=>({focus:p.powerFocus,title:p.title,load:p.load})),gel:()=>({cooldownMs:V66.gelCooldown(),remainingMs:Math.max(0,V66.gelCooldown()-(performance.now()-V66.gelLast))}),budget:()=>({money:career.money,reserved:V65Budget.reserved(),available:V65Budget.available()})};
+
+window.__ALUA_V65={version:'65-training-budget-nutrition',budget:()=>({money:career.money,reserved:V65Budget.reserved(),available:V65Budget.available()}),gut:()=>({carb:Math.round(P.gut||0),water:Math.round(P.waterGutMl||0),bottle:Math.round(P.bottleMl||0)}),plan:()=>TrainingEngine.selected()};
+
 window.__ALUA_V63={
   version:'63-balance',
   player:()=>({cp:career.cp,requested:P.basePower,actual:P.power,speedKmh:+(P.speed*3.6).toFixed(1),wpPct:+(P.wp/cfg.wp*100).toFixed(1),fatiguePct:+((P.fat||0)*100).toFixed(1),gly:+P.gly.toFixed(1),fluidDefPct:+(P.fluidDef*100).toFixed(2),gutCarb:+(P.gut||0).toFixed(1),gutWater:Math.round(P.waterGutMl||0)}),
@@ -2106,4 +2355,14 @@ window.__ALUA_V63={
 })();
 
 window.__ALUA_V61=window.__ALUA_V59;
-window.__ALUA_LATEST=window.__ALUA_V64;
+
+// V68 interaction repair: training cards use delegated clicks so re-renders never lose handlers.
+document.addEventListener('click',function(e){
+  const b=e.target.closest?.('#trainingPrograms button[data-program]');
+  if(!b)return;
+  e.preventDefault(); e.stopPropagation();
+  selectPlan(b.dataset.plan,b.dataset.program);
+},{capture:false});
+window.__ALUA_V68={version:'68-practical-training-click-repair'};
+window.__ALUA_LATEST=window.__ALUA_V68;
+

@@ -1,3 +1,3 @@
-# ALUA Simulator V64 — Decision Impact
+# ALUA Simulator V68 — Practical Training + Click Repair
 
-Revisión integral del sistema de decisiones: variedad por intención táctica, efectos persistentes de rueda/ataque/recuperación, balance competitivo, hidratación/energía más visibles y fatiga más contenida.
+Base V66. Nombres prácticos por objetivo + picos entrenados. Reparación de clics y desbloqueo reversible por presupuesto.
